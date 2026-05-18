@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CS CAFE | القائمة الاستثنائية</title>
+    <title>CS MENU | القائمة الاستثنائية</title>
 
     <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
     <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
@@ -378,7 +378,7 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.5);
         }
 
-        /* Invoice Sidebar (English Mode) */
+        /* Invoice Sidebar */
         .invoice-wrapper {
             position: sticky;
             top: 100px;
@@ -437,7 +437,6 @@
             gap: 12px;
         }
 
-        /* زر حذف صنف من السلة */
         .remove-cart-btn {
             background: rgba(255, 76, 76, 0.15);
             border: 1px solid rgba(255, 76, 76, 0.4);
@@ -484,7 +483,6 @@
             font-weight: 500;
         }
 
-        /* قائمة اختيار رقم الغرفة */
         .room-selector-block {
             margin-top: 15px;
             padding-top: 15px;
@@ -535,7 +533,6 @@
             line-height: 1.4;
         }
 
-        /* زر الواتساب الديناميكي */
         .btn-whatsapp {
             color: white;
             padding: 12px 20px;
@@ -625,15 +622,8 @@
             background: var(--gold-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
             letter-spacing: 0.5px;
-        }
-
-        .welcome-box p {
-            color: var(--text-dim);
-            font-size: 14px;
-            line-height: 1.6;
-            margin-bottom: 24px;
         }
 
         @keyframes fadeInDown {
@@ -651,7 +641,7 @@
 
     <header>
         <div class="brand">
-            <h1>CS CAFE</h1>
+            <h1>CS MENU</h1>
             <p id="cafe-subtitle" contenteditable="false">المذاق الاستثنائي يلتقي بالفخامة</p>
         </div>
         <button id="auth-btn" class="auth-btn" py-click="toggle_auth_modal">إدارة القائمة</button>
@@ -820,10 +810,9 @@
     <div id="welcome-modal" class="modal-overlay" style="display: flex;">
         <div class="glass-panel modal-box welcome-box">
             <div class="welcome-img-wrapper">
-                <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800" class="welcome-img" alt="CS Cafe Premium">
+                <img src="https://i.ibb.co/sdKVjdsm/Chat-GPT-Image-11-2026-01-15-34.png" class="welcome-img" alt="CS MENU Premium">
             </div>
-            <h2>Welcome to CS CAFE</h2>
-            <p>المذاق الاستثنائي يلتقي بالفخامة العصرية.<br>استمتع بتجربة فريدة مخصصة لراحتك الكاملة.</p>
+            <h2>Welcome to CS MENU</h2>
             <button class="btn-solid" style="width: 100%;" py-click="close_welcome_modal">Explore Menu | تصفح القائمة</button>
         </div>
     </div>
@@ -963,7 +952,7 @@
             auth_btn = document.querySelector("#auth-btn")
             subtitle = document.querySelector("#cafe-subtitle")
             
-            # كلمة المرور المحدثة: كايرو5
+            # تم تعديل كلمة المرور بنجاح لتصبح: كايرو5
             if password == "كايرو5":
                 is_logged_in = True
                 modal.style.display = "none"
@@ -971,7 +960,7 @@
                 document.body.classList.add("admin-mode")
                 auth_btn.innerText = "إغلاق اللوحة ✕"
                 
-                # تفعيل إمكانية التعديل للمشرف فقط عند الدخول
+                # تفعيل إمكانية التعديل للمشرف فقط عند الدخول الصحيح
                 subtitle.setAttribute("contenteditable", "true")
                 titles = document.querySelectorAll(".section-title")
                 for t in titles:
@@ -1020,7 +1009,6 @@
             document.querySelector("#main-menu-content").insertAdjacentHTML('beforeend', section_html)
             document.querySelector("#new-section-title").value = ""
             
-            # تحديث القائمة المنسدلة فورياً بعد إضافة القسم الجديد لمنع الاختفاء
             refresh_categories_dropdown()
             window.alert(f"تم إنشاء قسم '{title}' بنجاح.")
 
@@ -1074,7 +1062,7 @@
             order_buttons = document.querySelectorAll(".order-btn")
             total = 0
             summary_html = ""
-            whatsapp_text = "☕ *New Order from CS CAFE* ☕\n\n"
+            whatsapp_text = "☕ *New Order from CS MENU* ☕\n\n"
             
             for btn in order_buttons:
                 qty = int(btn.getAttribute("data-qty"))
@@ -1143,15 +1131,12 @@
             whatsapp_url = f"https://wa.me/201500950515?text={encoded_msg}"
             window.open(whatsapp_url, "_blank")
 
-        # جعل جلب وتحديث الأقسام متاحاً للـ JS المستمر
         window.pyscript_refresh_dropdown = refresh_categories_dropdown
     </script>
 
 <script>
-// === نظام الحفظ الذكي التلقائي الخاص بالمشرف فقط ===
-// يمنع التداخل أو المسح عند رفعه على GitHub Pages من قبل مستخدمين عاديين
+// === نظام الحفظ الذكي التلقائي الخارق للمشرف فقط ===
 function saveSiteData(){
-  // لا يحفظ البيانات إلا إذا كان كود الصفحة يحتوي على الكلاس الخاص بالمشرف active admin-mode
   if(document.body.classList.contains('admin-mode')){
     localStorage.setItem('cs_cafe_full_content', document.querySelector('#main-menu-content').innerHTML);
     localStorage.setItem('cs_cafe_subtitle', document.querySelector('#cafe-subtitle').innerHTML);
@@ -1171,14 +1156,13 @@ function loadSiteData(){
 
 document.addEventListener('DOMContentLoaded', ()=>{
   loadSiteData();
-  // الحفظ بشكل دوري متتابع للمشرف
   setInterval(saveSiteData, 1500);
   document.body.addEventListener('input', ()=>saveSiteData());
 });
 </script>
 
 <script>
-// حل مشكلة نقص الأقسام عبر مراقبة وتحديث الخيارات دورياً بشكل متناسق مع بايثون
+// مراقبة وتحديث خيارات الأقسام بشكل دوري متناسق مع بايثون
 document.addEventListener('DOMContentLoaded', ()=>{
   setInterval(()=>{
     if(window.pyscript_refresh_dropdown) {
