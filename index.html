@@ -593,7 +593,7 @@
         }
 
         .modal-box h3 { margin-bottom: 20px; font-size: 22px; }
-        .modal-box input { margin-bottom: 20px; text-align: center; letter-spacing: 5px; font-size: 18px; }
+        .modal-box input { margin-bottom: 20px; text-align: center; letter-spacing: 2px; font-size: 18px; }
 
         /* استايل النافذة الترحيبية */
         .welcome-box {
@@ -652,7 +652,7 @@
     <header>
         <div class="brand">
             <h1>CS CAFE</h1>
-            <p id="cafe-subtitle" contenteditable="true">المذاق الاستثنائي يلتقي بالفخامة</p>
+            <p id="cafe-subtitle" contenteditable="false">المذاق الاستثنائي يلتقي بالفخامة</p>
         </div>
         <button id="auth-btn" class="auth-btn" py-click="toggle_auth_modal">إدارة القائمة</button>
     </header>
@@ -677,9 +677,7 @@
                 <div class="input-group">
                     <label>القسم المستهدف</label>
                     <select id="new-category" class="premium-input">
-                        <option value="hot-container">القهوة المقطرة والساخنة</option>
-                        <option value="cold-container">المشروبات الباردة والمنعشة</option>
-                    </select>
+                        </select>
                 </div>
                 <div class="input-group" style="grid-column: 1 / -2;">
                     <label>رابط الصورة (URL)</label>
@@ -729,7 +727,7 @@
         <div class="menu-content" id="main-menu-content">
             
             <div class="section-block" id="block-hot">
-                <h2 class="section-title" contenteditable="true">القهوة المقطرة والساخنة</h2>
+                <h2 class="section-title" contenteditable="false">القهوة المقطرة والساخنة</h2>
                 <div id="hot-container" class="menu-grid">
                     <div class="card glass-panel" id="item-chemex">
                         <button class="delete-btn" py-click="delete_item">✕</button>
@@ -764,7 +762,7 @@
             </div>
 
             <div class="section-block" id="block-cold">
-                <h2 class="section-title" contenteditable="true">المشروبات الباردة والمنعشة</h2>
+                <h2 class="section-title" contenteditable="false">المشروبات الباردة والمنعشة</h2>
                 <div id="cold-container" class="menu-grid">
                     <div class="card glass-panel" id="item-coldbrew">
                         <button class="delete-btn" py-click="delete_item">✕</button>
@@ -912,17 +910,44 @@
         import asyncio
         asyncio.ensure_future(fetch_usd_rate())
 
+        # تحديث قائمة الأقسام المنسدلة في البايثون بشكل فوري لمنع أي خلل
+        def refresh_categories_dropdown():
+            cat_select = document.querySelector("#new-category")
+            if not cat_select:
+                return
+            cat_select.innerHTML = ""
+            grids = document.querySelectorAll(".menu-grid")
+            for grid in grids:
+                grid_id = grid.getAttribute("id")
+                if not grid_id:
+                    continue
+                block = grid.closest(".section-block")
+                title = "قسم بدون اسم"
+                if block:
+                    title_el = block.querySelector(".section-title")
+                    if title_el:
+                        title = title_el.innerText.strip()
+                opt = document.createElement("option")
+                opt.value = grid_id
+                opt.text = title
+                cat_select.appendChild(opt)
+
         def toggle_auth_modal(event):
             global is_logged_in
             modal = document.querySelector("#login-modal")
             admin_panel = document.querySelector("#admin-panel")
             auth_btn = document.querySelector("#auth-btn")
+            subtitle = document.querySelector("#cafe-subtitle")
             
             if is_logged_in:
                 is_logged_in = False
                 admin_panel.style.display = "none"
                 document.body.classList.remove("admin-mode")
                 auth_btn.innerText = "إدارة القائمة"
+                subtitle.setAttribute("contenteditable", "false")
+                titles = document.querySelectorAll(".section-title")
+                for t in titles:
+                    t.setAttribute("contenteditable", "false")
             else:
                 if modal.style.display == "flex":
                     modal.style.display = "none"
@@ -932,17 +957,27 @@
 
         def verify_password(event):
             global is_logged_in
-            password = document.querySelector("#password-input").value
+            password = document.querySelector("#password-input").value.strip()
             modal = document.querySelector("#login-modal")
             admin_panel = document.querySelector("#admin-panel")
             auth_btn = document.querySelector("#auth-btn")
+            subtitle = document.querySelector("#cafe-subtitle")
             
-            if password == "345":
+            # كلمة المرور المحدثة: كايرو5
+            if password == "كايرو5":
                 is_logged_in = True
                 modal.style.display = "none"
                 admin_panel.style.display = "block"
                 document.body.classList.add("admin-mode")
                 auth_btn.innerText = "إغلاق اللوحة ✕"
+                
+                # تفعيل إمكانية التعديل للمشرف فقط عند الدخول
+                subtitle.setAttribute("contenteditable", "true")
+                titles = document.querySelectorAll(".section-title")
+                for t in titles:
+                    t.setAttribute("contenteditable", "true")
+                
+                refresh_categories_dropdown()
             else:
                 window.alert("رمز المرور غير صحيح.")
 
@@ -971,7 +1006,9 @@
                 window.alert("الرجاء إدخال اسم القسم الجديد أولاً.")
                 return
             
-            section_id = f"custom-container-{window.id()}" if hasattr(window, 'id') else f"custom-{title}"
+            import random
+            rand_id = int(random.random() * 100000)
+            section_id = f"custom-container-{rand_id}"
             
             section_html = f'''
             <div class="section-block">
@@ -981,13 +1018,10 @@
             '''
             
             document.querySelector("#main-menu-content").insertAdjacentHTML('beforeend', section_html)
-            
-            new_option = document.createElement("option")
-            new_option.value = section_id
-            new_option.text = title
-            document.querySelector("#new-category").appendChild(new_option)
-            
             document.querySelector("#new-section-title").value = ""
+            
+            # تحديث القائمة المنسدلة فورياً بعد إضافة القسم الجديد لمنع الاختفاء
+            refresh_categories_dropdown()
             window.alert(f"تم إنشاء قسم '{title}' بنجاح.")
 
         def add_new_item(event):
@@ -1004,7 +1038,8 @@
             if not image_url:
                 image_url = "https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600"
 
-            unique_btn_id = f"btn-rand-{window.id()}" if hasattr(window, 'id') else f"btn-{name.replace(' ', '')}"
+            import random
+            rand_btn_id = f"btn-rand-{int(random.random() * 100000)}"
 
             card_html = f'''
             <div class="card glass-panel">
@@ -1016,7 +1051,7 @@
                 <p class="card-desc">{desc if desc else "مزيج فاخر محضر بعناية تامة ليناسب ذائقتك."}</p>
                 <div class="card-action">
                     <span class="price">{price} EGP</span>
-                    <button class="order-btn" id="{unique_btn_id}" py-click="increment_qty" data-price="{price}" data-name="{name}" data-qty="0">
+                    <button class="order-btn" id="{rand_btn_id}" py-click="increment_qty" data-price="{price}" data-name="{name}" data-qty="0">
                         Order <span class="order-badge">0</span>
                     </button>
                 </div>
@@ -1091,7 +1126,6 @@
                 result_box.style.display = "block"
                 whatsapp_btn.style.display = "none"
 
-        # دالة الإرسال إلى الواتساب مع التحقق الصارم المنبثق (Alert)
         def send_to_whatsapp(event):
             global whatsapp_message_global
             room_val = document.querySelector("#room-select").value
@@ -1099,66 +1133,58 @@
             error_msg = document.querySelector("#room-error")
             
             if room_val == "":
-                # إبراز الحقل بصرياً عبر الحدود الحمراء
                 dropdown.classList.add("error-border")
                 error_msg.style.display = "block"
-                
-                # إرجاع نافذة الإخطار المنبثقة الصارمة المنشودة (window.alert)
                 window.alert("⚠️ يرجى اختيار رقم الغرفة أولاً لإرسال الطلب!\n⚠️ Please select a room number first to submit your order!")
                 return
             
-            # في حال اختيار الغرفة بنجاح، يتم تضمينها في الرسالة والتحويل للواتساب مباشرة
             final_msg = f"{whatsapp_message_global}\n🏨 *📌 Location:* {room_val}"
             encoded_msg = window.encodeURIComponent(final_msg)
             whatsapp_url = f"https://wa.me/201500950515?text={encoded_msg}"
             window.open(whatsapp_url, "_blank")
+
+        # جعل جلب وتحديث الأقسام متاحاً للـ JS المستمر
+        window.pyscript_refresh_dropdown = refresh_categories_dropdown
     </script>
 
 <script>
-// === Persistent admin save ===
+// === نظام الحفظ الذكي التلقائي الخاص بالمشرف فقط ===
+// يمنع التداخل أو المسح عند رفعه على GitHub Pages من قبل مستخدمين عاديين
 function saveSiteData(){
-  localStorage.setItem('cs_cafe_full_content', document.querySelector('#main-menu-content').innerHTML);
-  localStorage.setItem('cs_cafe_subtitle', document.querySelector('#cafe-subtitle').innerHTML);
-  const titles=[...document.querySelectorAll('.section-title')].map(e=>e.innerHTML);
-  localStorage.setItem('cs_cafe_titles', JSON.stringify(titles));
+  // لا يحفظ البيانات إلا إذا كان كود الصفحة يحتوي على الكلاس الخاص بالمشرف active admin-mode
+  if(document.body.classList.contains('admin-mode')){
+    localStorage.setItem('cs_cafe_full_content', document.querySelector('#main-menu-content').innerHTML);
+    localStorage.setItem('cs_cafe_subtitle', document.querySelector('#cafe-subtitle').innerHTML);
+  }
 }
+
 function loadSiteData(){
   const content = localStorage.getItem('cs_cafe_full_content');
-  if(content){ document.querySelector('#main-menu-content').innerHTML = content; }
+  if(content){ 
+    document.querySelector('#main-menu-content').innerHTML = content; 
+  }
   const sub = localStorage.getItem('cs_cafe_subtitle');
-  if(sub){ document.querySelector('#cafe-subtitle').innerHTML = sub; }
-  const titles = JSON.parse(localStorage.getItem('cs_cafe_titles')||'[]');
-  document.querySelectorAll('.section-title').forEach((e,i)=>{ if(titles[i]) e.innerHTML=titles[i]; });
+  if(sub){ 
+    document.querySelector('#cafe-subtitle').innerHTML = sub; 
+  }
 }
+
 document.addEventListener('DOMContentLoaded', ()=>{
   loadSiteData();
-  setInterval(saveSiteData, 1200);
+  // الحفظ بشكل دوري متتابع للمشرف
+  setInterval(saveSiteData, 1500);
   document.body.addEventListener('input', ()=>saveSiteData());
-  document.body.addEventListener('click', (e)=>{
-    if(e.target.closest('.delete-btn') || e.target.closest('.btn-solid')) {
-      setTimeout(saveSiteData, 500);
-    }
-  });
 });
 </script>
 
 <script>
+// حل مشكلة نقص الأقسام عبر مراقبة وتحديث الخيارات دورياً بشكل متناسق مع بايثون
 document.addEventListener('DOMContentLoaded', ()=>{
-  const cat = document.getElementById('new-category');
-  function refreshCategories(){
-    if(!cat) return;
-    cat.innerHTML = '';
-    document.querySelectorAll('.menu-grid').forEach(grid=>{
-      if(!grid.id) return;
-      const title = grid.closest('.section-block')?.querySelector('.section-title')?.innerText?.trim() || 'قسم';
-      const opt = document.createElement('option');
-      opt.value = grid.id;
-      opt.text = title;
-      cat.appendChild(opt);
-    });
-  }
-  refreshCategories();
-  setInterval(refreshCategories, 1000);
+  setInterval(()=>{
+    if(window.pyscript_refresh_dropdown) {
+      window.pyscript_refresh_dropdown();
+    }
+  }, 1000);
 });
 </script>
 
