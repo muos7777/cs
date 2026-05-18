@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CS CAFE | القائمة الاستثنائية</title>
 
-    <!-- PyScript -->
     <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
     <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
 
-    <!-- Google Fonts: Cairo for Arabic, Montserrat for English/Numbers -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Montserrat:wght@500;700;800&display=swap" rel="stylesheet">
@@ -651,18 +649,6 @@
 </head>
 <body>
 
-    <!-- النافذة الترحيبية المنبثقة -->
-    <div id="welcome-modal" class="modal-overlay" style="display: flex;">
-        <div class="glass-panel welcome-box">
-            <div class="welcome-img-wrapper">
-                <img src="https://i.ibb.co/VYLVDC2X/Chat-GPT-Image-11-2026-01-15-34.png" class="welcome-img" alt="Welcome to CS CAFE">
-            </div>
-            <h2>Welcome to CS CAFE</h2>
-            <p>Experience the ultimate fusion of luxury, exceptional tastes, and premium service crafted just for you.</p>
-            <button class="btn-solid" style="width: 100%;" py-click="close_welcome_modal">Explore Menu</button>
-        </div>
-    </div>
-
     <header>
         <div class="brand">
             <h1>CS CAFE</h1>
@@ -673,7 +659,6 @@
 
     <main class="container">
         
-        <!-- لوحة التحكم للمدير -->
         <div id="admin-panel" class="glass-panel admin-panel">
             <h2>إضافة صنف جديد ✦</h2>
             <div class="admin-grid">
@@ -741,7 +726,6 @@
             </div>
         </div>
 
-        <!-- المنيو الرئيسي -->
         <div class="menu-content" id="main-menu-content">
             
             <div class="section-block" id="block-hot">
@@ -801,7 +785,6 @@
 
         </div>
 
-        <!-- الفاتورة الجانبية -->
         <aside>
             <div class="glass-panel invoice-wrapper">
                 <h2>Your Order</h2>
@@ -818,7 +801,6 @@
                         <div class="usd-price" id="bill-usd-price">~ 0.00 USD</div>
                     </div>
 
-                    <!-- اختيار رقم الغرفة -->
                     <div class="room-selector-block">
                         <label for="room-select">Select Room Number</label>
                         <select id="room-select" class="premium-select" onchange="on_room_change()">
@@ -837,7 +819,17 @@
 
     </main>
 
-    <!-- Modal تسجيل الدخول -->
+    <div id="welcome-modal" class="modal-overlay" style="display: flex;">
+        <div class="glass-panel modal-box welcome-box">
+            <div class="welcome-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800" class="welcome-img" alt="CS Cafe Premium">
+            </div>
+            <h2>Welcome to CS CAFE</h2>
+            <p>المذاق الاستثنائي يلتقي بالفخامة العصرية.<br>استمتع بتجربة فريدة مخصصة لراحتك الكاملة.</p>
+            <button class="btn-solid" style="width: 100%;" py-click="close_welcome_modal">Explore Menu | تصفح القائمة</button>
+        </div>
+    </div>
+
     <div id="login-modal" class="modal-overlay">
         <div class="glass-panel modal-box">
             <h3>صلاحيات الإدارة</h3>
@@ -847,7 +839,6 @@
         </div>
     </div>
 
-    <!-- بايثون (PyScript) -->
     <script type="py">
         from pyscript import document, window
         import pyodide
@@ -1124,7 +1115,7 @@
     </script>
 
 <script>
-// === Persistent admin save (added) ===
+// === Persistent admin save ===
 function saveSiteData(){
   localStorage.setItem('cs_cafe_full_content', document.querySelector('#main-menu-content').innerHTML);
   localStorage.setItem('cs_cafe_subtitle', document.querySelector('#cafe-subtitle').innerHTML);
@@ -1148,6 +1139,26 @@ document.addEventListener('DOMContentLoaded', ()=>{
       setTimeout(saveSiteData, 500);
     }
   });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', ()=>{
+  const cat = document.getElementById('new-category');
+  function refreshCategories(){
+    if(!cat) return;
+    cat.innerHTML = '';
+    document.querySelectorAll('.menu-grid').forEach(grid=>{
+      if(!grid.id) return;
+      const title = grid.closest('.section-block')?.querySelector('.section-title')?.innerText?.trim() || 'قسم';
+      const opt = document.createElement('option');
+      opt.value = grid.id;
+      opt.text = title;
+      cat.appendChild(opt);
+    });
+  }
+  refreshCategories();
+  setInterval(refreshCategories, 1000);
 });
 </script>
 
