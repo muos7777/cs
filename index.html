@@ -242,6 +242,14 @@
             font-weight: normal;
         }
 
+        /* تعديلات نمط الإدارة للمشروبات */
+        body.admin-mode .card-title,
+        body.admin-mode .card-desc,
+        body.admin-mode .price {
+            border-bottom: 1px dashed rgba(212, 175, 55, 0.5);
+            cursor: pointer;
+        }
+
         .menu-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -316,6 +324,7 @@
             font-size: 1.1em;
             font-weight: 800;
             margin-bottom: 6px;
+            outline: none;
         }
 
         .card-desc {
@@ -324,6 +333,7 @@
             line-height: 1.5;
             margin-bottom: 15px;
             flex-grow: 1;
+            outline: none;
         }
 
         .card-action {
@@ -339,6 +349,7 @@
             color: var(--gold-accent);
             font-size: 1.2em;
             font-weight: 700;
+            outline: none;
         }
 
         .order-btn {
@@ -724,10 +735,10 @@
                         <div class="card-img-wrapper">
                             <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=600" class="card-img" alt="كيميكس">
                         </div>
-                        <h3 class="card-title">كيميكس كولومبي</h3>
-                        <p class="card-desc">قهوة مختصة مقطرة بأداة الكيميكس، تتميز بقوام نقي وإيحاءات الكراميل والشوكولاتة الداكنة.</p>
+                        <h3 class="card-title" contenteditable="false">كيميكس كولومبي</h3>
+                        <p class="card-desc" contenteditable="false">قهوة مختصة مقطرة بأداة الكيميكس، تتميز بقوام نقي وإيحاءات الكراميل والشوكولاتة الداكنة.</p>
                         <div class="card-action">
-                            <span class="price">120 EGP</span>
+                            <span class="price" contenteditable="false">120 EGP</span>
                             <button class="order-btn" id="btn-id-chemex" py-click="increment_qty" data-price="120" data-name="كيميكس كولومبي" data-qty="0">
                                 Order <span class="order-badge">0</span>
                             </button>
@@ -739,10 +750,10 @@
                         <div class="card-img-wrapper">
                             <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?w=600" class="card-img" alt="لاتيه">
                         </div>
-                        <h3 class="card-title">فلات وايت</h3>
-                        <p class="card-desc">إسبريسو غني مع طبقة رقيقة من الحليب المبخر بسلاسة فائقة، لقوام مخملي متوازن.</p>
+                        <h3 class="card-title" contenteditable="false">فلات وايت</h3>
+                        <p class="card-desc" contenteditable="false">إسبريسو غني مع طبقة رقيقة من الحليب المبخر بسلاسة فائقة، لقوام مخملي متوازن.</p>
                         <div class="card-action">
-                            <span class="price">85 EGP</span>
+                            <span class="price" contenteditable="false">85 EGP</span>
                             <button class="order-btn" id="btn-id-flatwhite" py-click="increment_qty" data-price="85" data-name="فلات وايت" data-qty="0">
                                 Order <span class="order-badge">0</span>
                             </button>
@@ -759,10 +770,10 @@
                         <div class="card-img-wrapper">
                             <img src="https://images.unsplash.com/photo-1517701550927-30cfcb64c584?w=600" class="card-img" alt="كولد برو">
                         </div>
-                        <h3 class="card-title">كولد برو سيجنتشر</h3>
-                        <p class="card-desc">قهوة منقوعة بالماء البارد لمدة 24 ساعة، خالية من الحمضية، تقدم مع ثلج نقي.</p>
+                        <h3 class="card-title" contenteditable="false">كولد برو سيجنتشر</h3>
+                        <p class="card-desc" contenteditable="false">قهوة منقوعة بالماء البارد لمدة 24 ساعة، خالية من الحمضية، تقدم مع ثلج نقي.</p>
                         <div class="card-action">
-                            <span class="price">95 EGP</span>
+                            <span class="price" contenteditable="false">95 EGP</span>
                             <button class="order-btn" id="btn-id-coldbrew" py-click="increment_qty" data-price="95" data-name="كولد برو سيجنتشر" data-qty="0">
                                 Order <span class="order-badge">0</span>
                             </button>
@@ -904,6 +915,8 @@
             cat_select = document.querySelector("#new-category")
             if not cat_select:
                 return
+            # الاحتفاظ بالقيمة المحددة حالياً لتجنب تصفيرها
+            current_selection = cat_select.value
             cat_select.innerHTML = ""
             grids = document.querySelectorAll(".menu-grid")
             for grid in grids:
@@ -920,6 +933,12 @@
                 opt.value = grid_id
                 opt.text = title
                 cat_select.appendChild(opt)
+            
+            # إعادة الاختيار السابق إذا كان لا يزال متاحاً لمنع القفز للقسم الأول
+            if current_selection:
+                cat_select.value = current_selection
+
+        window.pyscript_refresh_dropdown = refresh_categories_dropdown
 
         def toggle_auth_modal(event):
             global is_logged_in
@@ -934,7 +953,9 @@
                 document.body.classList.remove("admin-mode")
                 auth_btn.innerText = "إدارة القائمة"
                 subtitle.setAttribute("contenteditable", "false")
-                titles = document.querySelectorAll(".section-title")
+                
+                # إلغاء تعديل بيانات المنتجات والأقسام
+                titles = document.querySelectorAll(".section-title, .card-title, .card-desc, .price")
                 for t in titles:
                     t.setAttribute("contenteditable", "false")
             else:
@@ -962,7 +983,7 @@
                 
                 # تفعيل إمكانية التعديل للمشرف فقط عند الدخول الصحيح
                 subtitle.setAttribute("contenteditable", "true")
-                titles = document.querySelectorAll(".section-title")
+                titles = document.querySelectorAll(".section-title, .card-title, .card-desc, .price")
                 for t in titles:
                     t.setAttribute("contenteditable", "true")
                 
@@ -975,6 +996,7 @@
             if card:
                 card.remove()
                 calculate_bill(None)
+                refresh_categories_dropdown()
 
         def increment_qty(event):
             btn = event.target.closest(".order-btn")
@@ -1029,16 +1051,17 @@
             import random
             rand_btn_id = f"btn-rand-{int(random.random() * 100000)}"
 
+            # الكروت الجديدة تدعم التعديل الفوري الذكي بوضع المسؤول
             card_html = f'''
             <div class="card glass-panel">
                 <button class="delete-btn" py-click="delete_item">✕</button>
                 <div class="card-img-wrapper">
                     <img src="{image_url}" class="card-img" alt="{name}" onerror="this.src='https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600'">
                 </div>
-                <h3 class="card-title">{name}</h3>
-                <p class="card-desc">{desc if desc else "مزيج فاخر محضر بعناية تامة ليناسب ذائقتك."}</p>
+                <h3 class="card-title" contenteditable="true">{name}</h3>
+                <p class="card-desc" contenteditable="true">{desc if desc else "مزيج فاخر محضر بعناية تامة ليناسب ذائقتك."}</p>
                 <div class="card-action">
-                    <span class="price">{price} EGP</span>
+                    <span class="price" contenteditable="true">{price} EGP</span>
                     <button class="order-btn" id="{rand_btn_id}" py-click="increment_qty" data-price="{price}" data-name="{name}" data-qty="0">
                         Order <span class="order-badge">0</span>
                     </button>
@@ -1065,18 +1088,26 @@
             whatsapp_text = "☕ *New Order from CS MENU* ☕\n\n"
             
             for btn in order_buttons:
+                card = btn.closest(".card")
+                # جلب البيانات المحدثة ديناميكياً لتتوافق مع التعديلات الجديدة
+                current_name = card.querySelector(".card-title").innerText.strip() if card else btn.getAttribute("data-name")
+                
+                try:
+                    price_text = card.querySelector(".price").innerText.replace("EGP", "").strip() if card else btn.getAttribute("data-price")
+                    current_price = int(''.join(filter(str.isdigit, price_text)))
+                except:
+                    current_price = int(btn.getAttribute("data-price"))
+                
                 qty = int(btn.getAttribute("data-qty"))
                 if qty > 0:
-                    name = btn.getAttribute("data-name")
-                    price = int(btn.getAttribute("data-price"))
                     btn_id = btn.getAttribute("id")
-                    item_total = qty * price
+                    item_total = qty * current_price
                     total += item_total
                     
                     summary_html += f'''
                     <div class="bill-item">
                         <div class="bill-item-details">
-                            <span>{name}</span>
+                            <span>{current_name}</span>
                             <span style="color:var(--gold-accent); font-family:'Montserrat'; font-size:12px;">Qty: x{qty}</span>
                         </div>
                         <div class="bill-item-price-zone">
@@ -1085,7 +1116,7 @@
                         </div>
                     </div>
                     '''
-                    whatsapp_text += f"▪️ {name} (x{qty}) -> {item_total} EGP\n"
+                    whatsapp_text += f"▪️ {current_name} (x{qty}) -> {item_total} EGP\n"
             
             result_box = document.querySelector("#bill-result")
             summary_div = document.querySelector("#bill-items")
@@ -1126,12 +1157,12 @@
                 window.alert("⚠️ يرجى اختيار رقم الغرفة أولاً لإرسال الطلب!\n⚠️ Please select a room number first to submit your order!")
                 return
             
+            # إعادة حساب الفاتورة قبل الإرسال لضمان مطابقة البيانات إذا تم تعديل السعر
+            calculate_bill(None)
             final_msg = f"{whatsapp_message_global}\n🏨 *📌 Location:* {room_val}"
             encoded_msg = window.encodeURIComponent(final_msg)
             whatsapp_url = f"https://wa.me/201500950515?text={encoded_msg}"
             window.open(whatsapp_url, "_blank")
-
-        window.pyscript_refresh_dropdown = refresh_categories_dropdown
     </script>
 
 <script>
@@ -1162,13 +1193,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
 </script>
 
 <script>
-// مراقبة وتحديث خيارات الأقسام بشكل دوري متناسق مع بايثون
+// تحديث خيارات الأقسام عند تحميل الصفحة لأول مرة فقط بالتوافق مع بايثون لمنع مشاكل الاختيار
 document.addEventListener('DOMContentLoaded', ()=>{
-  setInterval(()=>{
+  setTimeout(()=>{
     if(window.pyscript_refresh_dropdown) {
       window.pyscript_refresh_dropdown();
     }
-  }, 1000);
+  }, 1500);
 });
 </script>
 
