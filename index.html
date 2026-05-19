@@ -221,12 +221,43 @@
             margin-bottom: 40px;
         }
 
+        .section-header-wrap {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .delete-section-btn {
+            background: rgba(255, 76, 76, 0.15);
+            border: 1px solid rgba(255, 76, 76, 0.4);
+            color: var(--danger);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+
+        body.admin-mode .delete-section-btn {
+            display: flex;
+        }
+
+        .delete-section-btn:hover {
+            background: var(--danger);
+            color: white;
+            transform: scale(1.1);
+        }
+
         .section-title {
             font-size: 24px;
             font-weight: 800;
-            margin-bottom: 25px;
-            position: relative;
-            padding-bottom: 12px;
             outline: none;
             transition: color 0.3s;
         }
@@ -728,7 +759,10 @@
         <div class="menu-content" id="main-menu-content">
             
             <div class="section-block" id="block-hot">
-                <h2 class="section-title" contenteditable="false">القهوة المقطرة والساخنة</h2>
+                <div class="section-header-wrap">
+                    <button class="delete-section-btn" py-click="delete_section">✕</button>
+                    <h2 class="section-title" contenteditable="false">القهوة المقطرة والساخنة</h2>
+                </div>
                 <div id="hot-container" class="menu-grid">
                     <div class="card glass-panel" id="item-chemex">
                         <button class="delete-btn" py-click="delete_item">✕</button>
@@ -763,7 +797,10 @@
             </div>
 
             <div class="section-block" id="block-cold">
-                <h2 class="section-title" contenteditable="false">المشروبات الباردة والمنعشة</h2>
+                <div class="section-header-wrap">
+                    <button class="delete-section-btn" py-click="delete_section">✕</button>
+                    <h2 class="section-title" contenteditable="false">المشروبات الباردة والمنعشة</h2>
+                </div>
                 <div id="cold-container" class="menu-grid">
                     <div class="card glass-panel" id="item-coldbrew">
                         <button class="delete-btn" py-click="delete_item">✕</button>
@@ -910,12 +947,10 @@
         import asyncio
         asyncio.ensure_future(fetch_usd_rate())
 
-        # تحديث قائمة الأقسام المنسدلة في البايثون بشكل فوري لمنع أي خلل
         def refresh_categories_dropdown():
             cat_select = document.querySelector("#new-category")
             if not cat_select:
                 return
-            # الاحتفاظ بالقيمة المحددة حالياً لتجنب تصفيرها
             current_selection = cat_select.value
             cat_select.innerHTML = ""
             grids = document.querySelectorAll(".menu-grid")
@@ -934,7 +969,6 @@
                 opt.text = title
                 cat_select.appendChild(opt)
             
-            # إعادة الاختيار السابق إذا كان لا يزال متاحاً لمنع القفز للقسم الأول
             if current_selection:
                 cat_select.value = current_selection
 
@@ -954,7 +988,6 @@
                 auth_btn.innerText = "إدارة القائمة"
                 subtitle.setAttribute("contenteditable", "false")
                 
-                # إلغاء تعديل بيانات المنتجات والأقسام
                 titles = document.querySelectorAll(".section-title, .card-title, .card-desc, .price")
                 for t in titles:
                     t.setAttribute("contenteditable", "false")
@@ -973,7 +1006,6 @@
             auth_btn = document.querySelector("#auth-btn")
             subtitle = document.querySelector("#cafe-subtitle")
             
-            # تم تعديل كلمة المرور بنجاح لتصبح: كايرو5
             if password == "كايرو5":
                 is_logged_in = True
                 modal.style.display = "none"
@@ -981,7 +1013,6 @@
                 document.body.classList.add("admin-mode")
                 auth_btn.innerText = "إغلاق اللوحة ✕"
                 
-                # تفعيل إمكانية التعديل للمشرف فقط عند الدخول الصحيح
                 subtitle.setAttribute("contenteditable", "true")
                 titles = document.querySelectorAll(".section-title, .card-title, .card-desc, .price")
                 for t in titles:
@@ -995,6 +1026,13 @@
             card = event.target.closest(".card")
             if card:
                 card.remove()
+                calculate_bill(None)
+                refresh_categories_dropdown()
+
+        def delete_section(event):
+            section = event.target.closest(".section-block")
+            if section:
+                section.remove()
                 calculate_bill(None)
                 refresh_categories_dropdown()
 
@@ -1023,7 +1061,10 @@
             
             section_html = f'''
             <div class="section-block">
-                <h2 class="section-title" contenteditable="true">{title}</h2>
+                <div class="section-header-wrap">
+                    <button class="delete-section-btn" py-click="delete_section">✕</button>
+                    <h2 class="section-title" contenteditable="true">{title}</h2>
+                </div>
                 <div id="{section_id}" class="menu-grid"></div>
             </div>
             '''
@@ -1051,7 +1092,6 @@
             import random
             rand_btn_id = f"btn-rand-{int(random.random() * 100000)}"
 
-            # الكروت الجديدة تدعم التعديل الفوري الذكي بوضع المسؤول
             card_html = f'''
             <div class="card glass-panel">
                 <button class="delete-btn" py-click="delete_item">✕</button>
@@ -1089,7 +1129,6 @@
             
             for btn in order_buttons:
                 card = btn.closest(".card")
-                # جلب البيانات المحدثة ديناميكياً لتتوافق مع التعديلات الجديدة
                 current_name = card.querySelector(".card-title").innerText.strip() if card else btn.getAttribute("data-name")
                 
                 try:
@@ -1157,7 +1196,6 @@
                 window.alert("⚠️ يرجى اختيار رقم الغرفة أولاً لإرسال الطلب!\n⚠️ Please select a room number first to submit your order!")
                 return
             
-            # إعادة حساب الفاتورة قبل الإرسال لضمان مطابقة البيانات إذا تم تعديل السعر
             calculate_bill(None)
             final_msg = f"{whatsapp_message_global}\n🏨 *📌 Location:* {room_val}"
             encoded_msg = window.encodeURIComponent(final_msg)
