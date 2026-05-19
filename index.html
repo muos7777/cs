@@ -246,7 +246,7 @@
             transition: all 0.2s ease;
         }
 
-        /* إظهار أزرار الحذف للأقسام والكروت فور تفعيل وضع الإدارة */
+        /* إظهار أزرار الحذف للأقسام والكروت فور تفعيل وضع الإدارة عن طريق الـ CSS بشكل صارم */
         body.admin-mode .delete-section-btn,
         body.admin-mode .delete-btn {
             display: flex !important;
@@ -761,12 +761,12 @@
             
             <div class="section-block" id="block-hot">
                 <div class="section-header-wrap">
-                    <button class="delete-section-btn" py-click="delete_section">✕</button>
+                    <button class="delete-section-btn">✕</button>
                     <h2 class="section-title" contenteditable="false">القهوة المقطرة والساخنة</h2>
                 </div>
                 <div id="hot-container" class="menu-grid">
                     <div class="card glass-panel" id="item-chemex">
-                        <button class="delete-btn" py-click="delete_item">✕</button>
+                        <button class="delete-btn">✕</button>
                         <div class="card-img-wrapper">
                             <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=600" class="card-img" alt="كيميكس">
                         </div>
@@ -781,7 +781,7 @@
                     </div>
 
                     <div class="card glass-panel" id="item-flatwhite">
-                        <button class="delete-btn" py-click="delete_item">✕</button>
+                        <button class="delete-btn">✕</button>
                         <div class="card-img-wrapper">
                             <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?w=600" class="card-img" alt="لاتيه">
                         </div>
@@ -799,12 +799,12 @@
 
             <div class="section-block" id="block-cold">
                 <div class="section-header-wrap">
-                    <button class="delete-section-btn" py-click="delete_section">✕</button>
+                    <button class="delete-section-btn">✕</button>
                     <h2 class="section-title" contenteditable="false">المشروبات الباردة والمنعشة</h2>
                 </div>
                 <div id="cold-container" class="menu-grid">
                     <div class="card glass-panel" id="item-coldbrew">
-                        <button class="delete-btn" py-click="delete_item">✕</button>
+                        <button class="delete-btn">✕</button>
                         <div class="card-img-wrapper">
                             <img src="https://images.unsplash.com/photo-1517701550927-30cfcb64c584?w=600" class="card-img" alt="كولد برو">
                         </div>
@@ -878,6 +878,7 @@
     <script type="py">
         from pyscript import document, window
         import json
+        import pyodide # استيراد المكتبة هنا لحل الـ NameError تماماً
 
         is_logged_in = False
         whatsapp_message_global = "" 
@@ -1019,7 +1020,26 @@
                 for t in titles:
                     t.setAttribute("contenteditable", "true")
                 
-                # ربط وإصلاح أحداث الضغط لجميع أزرار الحذف (القديمة والمسترجعة من الحفظ والجديدة) فوراً
+                # تأمين وإعادة بناء أزرار الحذف للأقسام المسترجعة من الـ localStorage إن لم تكن موجودة
+                all_blocks = document.querySelectorAll(".section-block")
+                for block in all_blocks:
+                    header_wrap = block.querySelector(".section-header-wrap")
+                    if header_wrap and not header_wrap.querySelector(".delete-section-btn"):
+                        del_btn = document.createElement("button")
+                        del_btn.className = "delete-section-btn"
+                        del_btn.innerText = "✕"
+                        header_wrap.insertBefore(del_btn, header_wrap.firstChild)
+
+                # تأمين أزرار الحذف للكروت المسترجعة من الـ localStorage
+                all_cards = document.querySelectorAll(".card")
+                for card in all_cards:
+                    if not card.querySelector(".delete-btn"):
+                        del_card_btn = document.createElement("button")
+                        del_card_btn.className = "delete-btn"
+                        del_card_btn.innerText = "✕"
+                        card.insertBefore(del_card_btn, card.firstChild)
+
+                # ربط الأحداث برمجياً بنجاح وبدون أي خطأ
                 all_section_del_buttons = document.querySelectorAll(".delete-section-btn")
                 for btn in all_section_del_buttons:
                     btn.addEventListener("click", pyodide.ffi.create_proxy(delete_section))
@@ -1082,7 +1102,7 @@
             document.querySelector("#main-menu-content").insertAdjacentHTML('beforeend', section_html)
             document.querySelector("#new-section-title").value = ""
             
-            # ربط الحدث للقسم الجديد
+            # ربط الحدث للقسم الجديد فوراً
             new_block = document.querySelector(f"#{section_id}").closest(".section-block")
             new_btn = new_block.querySelector(".delete-section-btn")
             new_btn.addEventListener("click", pyodide.ffi.create_proxy(delete_section))
