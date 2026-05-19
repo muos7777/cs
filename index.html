@@ -238,7 +238,7 @@
             height: 32px;
             border-radius: 50%;
             cursor: pointer;
-            display: none;
+            display: none !important; /* مخفي افتراضياً لغير الأدمن */
             align-items: center;
             justify-content: center;
             font-size: 14px;
@@ -246,8 +246,10 @@
             transition: all 0.2s ease;
         }
 
-        body.admin-mode .delete-section-btn {
-            display: flex;
+        /* إظهار أزرار الحذف للأقسام والكروت فور تفعيل وضع الإدارة */
+        body.admin-mode .delete-section-btn,
+        body.admin-mode .delete-btn {
+            display: flex !important;
         }
 
         .delete-section-btn:hover {
@@ -316,16 +318,12 @@
             cursor: pointer;
             font-size: 14px;
             font-weight: bold;
-            display: none;
+            display: none !important;
             align-items: center;
             justify-content: center;
             z-index: 10;
             box-shadow: 0 2px 8px rgba(0,0,0,0.4);
             transition: background 0.2s, transform 0.2s;
-        }
-
-        body.admin-mode .delete-btn {
-            display: flex;
         }
 
         .delete-btn:hover {
@@ -879,7 +877,6 @@
 
     <script type="py">
         from pyscript import document, window
-        import pyodide
         import json
 
         is_logged_in = False
@@ -891,11 +888,12 @@
 
         def setup_room_numbers():
             select_element = document.querySelector("#room-select")
-            for room in range(101, 119):
-                opt = document.createElement("option")
-                opt.value = f"Room {room}"
-                opt.text = f"Room {room}"
-                select_element.appendChild(opt)
+            if select_element and select_element.children.length <= 1:
+                for room in range(101, 119):
+                    opt = document.createElement("option")
+                    opt.value = f"Room {room}"
+                    opt.text = f"Room {room}"
+                    select_element.appendChild(opt)
 
         setup_room_numbers()
 
@@ -945,7 +943,7 @@
                 data = json.loads(data_text)
                 usd_rate = data["rates"]["USD"]
             except Exception as e:
-                print("Using baseline conversion rate.")
+                pass
 
         import asyncio
         asyncio.ensure_future(fetch_usd_rate())
@@ -1021,10 +1019,14 @@
                 for t in titles:
                     t.setAttribute("contenteditable", "true")
                 
-                # ربط أزرار الحذف لجميع الأقسام (القديمة والجديدة) لتعمل بشكل ديناميكي كامل
-                all_del_buttons = document.querySelectorAll(".delete-section-btn")
-                for btn in all_del_buttons:
-                    btn.setAttribute("py-click", "delete_section")
+                # ربط وإصلاح أحداث الضغط لجميع أزرار الحذف (القديمة والمسترجعة من الحفظ والجديدة) فوراً
+                all_section_del_buttons = document.querySelectorAll(".delete-section-btn")
+                for btn in all_section_del_buttons:
+                    btn.addEventListener("click", pyodide.ffi.create_proxy(delete_section))
+
+                all_card_del_buttons = document.querySelectorAll(".delete-btn")
+                for btn in all_card_del_buttons:
+                    btn.addEventListener("click", pyodide.ffi.create_proxy(delete_item))
                 
                 refresh_categories_dropdown()
             else:
@@ -1070,7 +1072,7 @@
             section_html = f'''
             <div class="section-block">
                 <div class="section-header-wrap">
-                    <button class="delete-section-btn" py-click="delete_section">✕</button>
+                    <button class="delete-section-btn">✕</button>
                     <h2 class="section-title" contenteditable="false">{title}</h2>
                 </div>
                 <div id="{section_id}" class="menu-grid"></div>
@@ -1080,6 +1082,11 @@
             document.querySelector("#main-menu-content").insertAdjacentHTML('beforeend', section_html)
             document.querySelector("#new-section-title").value = ""
             
+            # ربط الحدث للقسم الجديد
+            new_block = document.querySelector(f"#{section_id}").closest(".section-block")
+            new_btn = new_block.querySelector(".delete-section-btn")
+            new_btn.addEventListener("click", pyodide.ffi.create_proxy(delete_section))
+
             refresh_categories_dropdown()
             window.alert(f"تم إنشاء قسم '{title}' بنجاح.")
 
@@ -1102,7 +1109,7 @@
 
             card_html = f'''
             <div class="card glass-panel">
-                <button class="delete-btn" py-click="delete_item">✕</button>
+                <button class="delete-btn">✕</button>
                 <div class="card-img-wrapper">
                     <img src="{image_url}" class="card-img" alt="{name}" onerror="this.src='https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600'">
                 </div>
@@ -1118,7 +1125,13 @@
             '''
 
             try:
-                document.querySelector(f"#{category}").insertAdjacentHTML('beforeend', card_html)
+                container = document.querySelector(f"#{category}")
+                container.insertAdjacentHTML('beforeend', card_html)
+                
+                # ربط حدث الحذف للكارت الجديد
+                last_card = container.lastElementChild
+                last_card.querySelector(".delete-btn").addEventListener("click", pyodide.ffi.create_proxy(delete_item))
+                
                 window.alert("تمت إضافة المشروب بنجاح.")
             except Exception as e:
                 window.alert("عذراً، حدث خطأ أثناء تحديد القسم.")
@@ -1209,6 +1222,8 @@
             encoded_msg = window.encodeURIComponent(final_msg)
             whatsapp_url = f"https://wa.me/201500950515?text={encoded_msg}"
             window.open(whatsapp_url, "_blank")
+
+        window.pyscript_refresh_dropdown = refresh_categories_dropdown
     </script>
 
 <script>
@@ -1239,7 +1254,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
 </script>
 
 <script>
-// تحديث خيارات الأقسام عند تحميل الصفحة لأول مرة فقط بالتوافق مع بايثون لمنع مشاكل الاختيار
+// مراقبة وتحديث خيارات الأقسام بشكل دوري متناسق مع بايثون
 document.addEventListener('DOMContentLoaded', ()=>{
   setTimeout(()=>{
     if(window.pyscript_refresh_dropdown) {
