@@ -5,10 +5,40 @@
       "container_id": "hot-container",
       "items": [
         {
-          "name": "77",
-          "desc": "77",
-          "price": 77,
-          "image": "https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600"
+          "name": "قهوة تركي | Turkish coffee",
+          "desc": ".",
+          "price": 30,
+          "image": "https://i.ytimg.com/vi/hwbhA31qSYk/maxresdefault.jpg"
+        },
+        {
+          "name": "شاي مصري | Egyptian tea",
+          "desc": "مزيج فاخر محضر بعناية تامة ليناسب ذائقتك.",
+          "price": 25,
+          "image": "https://i.ytimg.com/vi/BFoUzKnDqIo/hqdefault.jpg"
+        },
+        {
+          "name": "شاي حليب | milk tea",
+          "desc": ".",
+          "price": 30,
+          "image": "https://img.lahloba.com/news/large/f329ccdd-2d01-4389-bea9-0b67cbed2848.jpeg"
+        },
+        {
+          "name": "شاي ليبتون | Lipton tea",
+          "desc": "مزيج فاخر محضر بعناية تامة ليناسب ذائقتك.",
+          "price": 25,
+          "image": "https://avatars.mds.yandex.net/i?id=fccab87d002771dcf4e964ddeaea1970_l-5219999-images-thumbs&ref=rim&n=13&w=2000&h=1325"
+        },
+        {
+          "name": "نسكافيه بلاك | Nescafé Black",
+          "desc": "مزيج فاخر محضر بعناية تامة ليناسب ذائقتك.",
+          "price": 30,
+          "image": "https://avatars.mds.yandex.net/i?id=2b5437af593f5b6efd92015461bc9277_l-5179158-images-thumbs&ref=rim&n=13&w=900&h=900"
+        },
+        {
+          "name": "نسكافيه جولد | Nescafe Gold",
+          "desc": "مزيج فاخر محضر بعناية تامة ليناسب ذائقتك.",
+          "price": 35,
+          "image": "https://cdn.salla.sa/mEGGZ/YTD482xcaDBdbw9KVhOUssup3Qrxwkbm5Cy0r9Gy.jpg"
         }
       ]
     },
