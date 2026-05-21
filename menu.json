@@ -1,34 +1,26 @@
 {
   "sections": [
     {
-      "title": "القهوة المقطرة والساخنة",
+      "title": "مشروبات ساخنه |",
       "container_id": "hot-container",
       "items": [
         {
-          "name": "كيميكس كولومبي",
-          "desc": "قهوة مختصة مقطرة بأداة الكيميكس، تتميز بقوام نقي وإيحاءات الكراميل والشوكولاتة الداكنة.",
-          "price": 120,
-          "image": "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=600"
-        },
-        {
-          "name": "فلات وايت",
-          "desc": "إسبريسو غني مع طبقة رقيقة من الحليب المبخر بسلاسة فائقة، لقوام مخملي متوازن.",
-          "price": 85,
-          "image": "https://images.unsplash.com/photo-1541167760496-1628856ab772?w=600"
+          "name": "77",
+          "desc": "77",
+          "price": 77,
+          "image": "https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600"
         }
       ]
     },
     {
       "title": "المشروبات الباردة والمنعشة",
       "container_id": "cold-container",
-      "items": [
-        {
-          "name": "كولد برو سيجنتشر",
-          "desc": "قهوة منقوعة بالماء البارد لمدة 24 ساعة، خالية من الحمضية، تقدم مع ثلج نقي.",
-          "price": 95,
-          "image": "https://images.unsplash.com/photo-1517701550927-30cfcb64c584?w=600"
-        }
-      ]
+      "items": []
+    },
+    {
+      "title": "Test",
+      "container_id": "custom-container-8851",
+      "items": []
     }
   ]
 }
