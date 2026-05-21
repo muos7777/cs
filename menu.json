@@ -12,7 +12,7 @@
         },
         {
           "name": "شاي مصري | Egyptian tea",
-          "desc": "مزيج فاخر محضر بعناية تامة ليناسب ذائقتك.",
+          "desc": ".",
           "price": 25,
           "image": "https://i.ytimg.com/vi/BFoUzKnDqIo/hqdefault.jpg"
         },
@@ -24,19 +24,19 @@
         },
         {
           "name": "شاي ليبتون | Lipton tea",
-          "desc": "مزيج فاخر محضر بعناية تامة ليناسب ذائقتك.",
+          "desc": ".",
           "price": 25,
           "image": "https://avatars.mds.yandex.net/i?id=fccab87d002771dcf4e964ddeaea1970_l-5219999-images-thumbs&ref=rim&n=13&w=2000&h=1325"
         },
         {
           "name": "نسكافيه بلاك | Nescafé Black",
-          "desc": "مزيج فاخر محضر بعناية تامة ليناسب ذائقتك.",
+          "desc": ".",
           "price": 30,
           "image": "https://avatars.mds.yandex.net/i?id=2b5437af593f5b6efd92015461bc9277_l-5179158-images-thumbs&ref=rim&n=13&w=900&h=900"
         },
         {
           "name": "نسكافيه جولد | Nescafe Gold",
-          "desc": "مزيج فاخر محضر بعناية تامة ليناسب ذائقتك.",
+          "desc": ".",
           "price": 35,
           "image": "https://cdn.salla.sa/mEGGZ/YTD482xcaDBdbw9KVhOUssup3Qrxwkbm5Cy0r9Gy.jpg"
         }
@@ -48,9 +48,27 @@
       "items": [
         {
           "name": "طفايه سجائر | ashtray",
-          "desc": "مزيج فاخر محضر بعناية تامة ليناسب ذائقتك.",
+          "desc": ".",
           "price": 0,
           "image": "https://i.pinimg.com/736x/5f/8d/4f/5f8d4ffb2f28e9c614b94b6c35b45ac7.jpg"
+        },
+        {
+          "name": "LM RED\\BLUE",
+          "desc": ".",
+          "price": 100,
+          "image": "https://1000logos.net/wp-content/uploads/2020/09/LM-Logo.png"
+        },
+        {
+          "name": "Marlboro",
+          "desc": ".",
+          "price": 120,
+          "image": "https://sintrafucarb.com.br/wp-content/uploads/2022/10/marlboro.jpg"
+        },
+        {
+          "name": "winston",
+          "desc": ".",
+          "price": 120,
+          "image": "https://images.seeklogo.com/logo-png/47/2/winston-logo-png_seeklogo-475901.png"
         }
       ]
     },
