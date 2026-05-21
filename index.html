@@ -625,47 +625,9 @@
         .modal-box h3 { margin-bottom: 20px; font-size: 22px; }
         .modal-box input { margin-bottom: 20px; text-align: center; letter-spacing: 2px; font-size: 18px; }
 
-        .welcome-box {
-            max-width: 440px;
-            padding: 24px;
-            font-family: 'Montserrat', sans-serif;
-            text-align: center;
-            animation: fadeInScale 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-
-        .welcome-img-wrapper {
-            width: 100%;
-            border-radius: 16px;
-            overflow: hidden;
-            border: 1px solid var(--glass-border);
-            margin-bottom: 20px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-        }
-
-        .welcome-img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        .welcome-box h2 {
-            font-size: 24px;
-            font-weight: 800;
-            background: var(--gold-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 20px;
-            letter-spacing: 0.5px;
-        }
-
         @keyframes fadeInDown {
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInScale {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
         }
     </style>
 </head>
@@ -746,14 +708,12 @@
             </div>
         </div>
 
-        <!-- ========== NEW JSON EXPORT/IMPORT SECTION ========== -->
         <h2>📁 تصدير / استيراد JSON ✦</h2>
         <div class="admin-grid" style="margin-top: 10px;">
             <button class="btn-solid" py-click="export_menu_to_json">📥 تصدير القائمة إلى JSON (تنزيل)</button>
             <button class="btn-solid" py-click="import_menu_from_json">📂 استيراد القائمة من ملف JSON</button>
         </div>
         <p style="font-size: 12px; color: var(--text-dim); margin-top: 5px;">⚠️ بعد الاستيراد، ستُستبدل القائمة الحالية بالبيانات الجديدة. لا تنسَ حفظ التغييرات عبر زر التصدير لرفعها على GitHub.</p>
-        <!-- ================================================== -->
     </div>
 
     <div class="menu-content" id="main-menu-content">
@@ -793,16 +753,6 @@
     </aside>
 </main>
 
-<div id="welcome-modal" class="modal-overlay" style="display: flex;">
-    <div class="glass-panel modal-box welcome-box">
-        <div class="welcome-img-wrapper">
-            <img src="https://i.ibb.co/sdKVjdsm/Chat-GPT-Image-11-2026-01-15-34.png" class="welcome-img" alt="CS MENU Premium">
-        </div>
-        <h2>Welcome to CS MENU</h2>
-        <button class="btn-solid" style="width: 100%;" py-click="close_welcome_modal">Explore Menu | تصفح القائمة</button>
-    </div>
-</div>
-
 <div id="login-modal" class="modal-overlay">
     <div class="glass-panel modal-box">
         <h3>صلاحيات الإدارة</h3>
@@ -825,9 +775,6 @@
     usd_rate = 0.020 
 
     # ------------------- UTILITIES -------------------
-    def close_welcome_modal(event):
-        document.querySelector("#welcome-modal").style.display = "none"
-
     def setup_room_numbers():
         select_element = document.querySelector("#room-select")
         for room in range(101, 119):
@@ -1222,7 +1169,6 @@
                     rebuild_menu_from_json(data)
                     window.alert("✅ تم استيراد القائمة بنجاح!")
                     refresh_categories_dropdown()
-                    # إعادة تطبيق وضع الإدارة إذا كان نشطاً
                     if is_logged_in:
                         titles = document.querySelectorAll(".section-title, .card-title, .card-desc, .price")
                         for t in titles:
@@ -1236,7 +1182,6 @@
 
     # ------------------- LOAD DEFAULT OR REMOTE JSON -------------------
     async def load_initial_menu():
-        # أولاً: محاولة جلب menu.json من نفس المسار
         try:
             response = await pyfetch("menu.json")
             if response.status == 200:
@@ -1247,7 +1192,6 @@
         except Exception as e:
             print("لم يتم العثور على menu.json، سيتم استخدام البيانات الافتراضية.")
         
-        # إذا لم يوجد menu.json، نبني القائمة الافتراضية يدوياً
         default_data = {
             "sections": [
                 {
@@ -1275,7 +1219,6 @@
 </script>
 
 <script>
-    // حفظ القائمة تلقائياً في localStorage فقط لوضع الإدارة (احتياطي محلي)
     function saveSiteData(){
         if(document.body.classList.contains('admin-mode')){
             localStorage.setItem('cs_cafe_full_content', document.querySelector('#main-menu-content').innerHTML);
@@ -1297,7 +1240,6 @@
         setInterval(saveSiteData, 1500);
         document.body.addEventListener('input', ()=>saveSiteData());
     });
-    // تحديث القائمة المنسدلة للأقسام بعد تحميل الصفحة
     document.addEventListener('DOMContentLoaded', ()=>{
         setTimeout(()=>{
             if(window.pyscript_refresh_dropdown) {
