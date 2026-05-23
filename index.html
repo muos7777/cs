@@ -51,7 +51,6 @@
             overflow-x: hidden;
         }
 
-        /* Glassmorphism Effect */
         .glass-panel {
             background: var(--glass-bg);
             backdrop-filter: blur(16px);
@@ -61,7 +60,6 @@
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         }
 
-        /* Header */
         header {
             padding: 20px 5%;
             display: flex;
@@ -118,7 +116,6 @@
             box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
         }
 
-        /* Main Layout */
         .container {
             padding: 20px 5%;
             display: grid;
@@ -138,7 +135,6 @@
             }
         }
 
-        /* Admin Panel */
         .admin-panel {
             grid-column: 1 / -1;
             padding: 25px;
@@ -211,7 +207,6 @@
             box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
         }
 
-        /* Menu Section */
         .menu-content {
             display: flex;
             flex-direction: column;
@@ -274,7 +269,6 @@
             font-weight: normal;
         }
 
-        /* تعديلات نمط الإدارة للمشروبات */
         body.admin-mode .card-title,
         body.admin-mode .card-desc,
         body.admin-mode .price {
@@ -288,7 +282,6 @@
             gap: 20px;
         }
 
-        /* Product Cards */
         .card {
             padding: var(--custom-padding);
             font-size: var(--custom-font-size);
@@ -421,7 +414,6 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.5);
         }
 
-        /* Invoice Sidebar */
         .invoice-wrapper {
             position: sticky;
             top: 100px;
@@ -613,7 +605,6 @@
             background: #20ba5a !important;
         }
 
-        /* Modals Overlays */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -635,7 +626,7 @@
         .modal-box h3 { margin-bottom: 20px; font-size: 22px; }
         .modal-box input { margin-bottom: 20px; text-align: center; letter-spacing: 2px; font-size: 18px; }
 
-        /* شاشة الترحيب الجديدة (بدون صورة) */
+        /* شاشة الترحيب (بدون صورة) */
         .welcome-box {
             max-width: 440px;
             padding: 40px 30px;
@@ -703,8 +694,7 @@
                 </div>
                 <div class="input-group">
                     <label>القسم المستهدف</label>
-                    <select id="new-category" class="premium-input">
-                        </select>
+                    <select id="new-category" class="premium-input"></select>
                 </div>
                 <div class="input-group" style="grid-column: 1 / -2;">
                     <label>رابط الصورة (URL)</label>
@@ -720,6 +710,13 @@
                     <input type="text" id="new-section-title" class="premium-input" placeholder="مثال: الحلويات الفاخرة">
                 </div>
                 <button class="btn-solid" py-click="add_new_section">إنشاء القسم فوراً</button>
+            </div>
+
+            <h2>📁 حفظ واستيراد JSON ✦</h2>
+            <div class="admin-grid">
+                <button class="btn-solid" py-click="export_menu_to_json">📥 تصدير القائمة إلى JSON</button>
+                <button class="btn-solid" py-click="import_menu_from_json">📂 استيراد القائمة من JSON</button>
+                <button class="btn-solid" py-click="refresh_from_json">🔄 تحديث القائمة من menu.json</button>
             </div>
 
             <h2>أداة تخصيص الأبعاد والمواقع الذكية ✦</h2>
@@ -754,68 +751,7 @@
         </div>
 
         <div class="menu-content" id="main-menu-content">
-            
-            <div class="section-block" id="block-hot">
-                <div class="section-header-wrap">
-                    <button class="delete-section-btn" py-click="delete_section">✕</button>
-                    <h2 class="section-title" contenteditable="false">القهوة المقطرة والساخنة</h2>
-                </div>
-                <div id="hot-container" class="menu-grid">
-                    <div class="card glass-panel" id="item-chemex">
-                        <button class="delete-btn" py-click="delete_item">✕</button>
-                        <div class="card-img-wrapper">
-                            <img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=600" class="card-img" alt="كيميكس">
-                        </div>
-                        <h3 class="card-title" contenteditable="false">كيميكس كولومبي</h3>
-                        <p class="card-desc" contenteditable="false">قهوة مختصة مقطرة بأداة الكيميكس، تتميز بقوام نقي وإيحاءات الكراميل والشوكولاتة الداكنة.</p>
-                        <div class="card-action">
-                            <span class="price" contenteditable="false">120 EGP</span>
-                            <button class="order-btn" id="btn-id-chemex" py-click="increment_qty" data-price="120" data-name="كيميكس كولومبي" data-qty="0">
-                                Order <span class="order-badge">0</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="card glass-panel" id="item-flatwhite">
-                        <button class="delete-btn" py-click="delete_item">✕</button>
-                        <div class="card-img-wrapper">
-                            <img src="https://images.unsplash.com/photo-1541167760496-1628856ab772?w=600" class="card-img" alt="لاتيه">
-                        </div>
-                        <h3 class="card-title" contenteditable="false">فلات وايت</h3>
-                        <p class="card-desc" contenteditable="false">إسبريسو غني مع طبقة رقيقة من الحليب المبخر بسلاسة فائقة، لقوام مخملي متوازن.</p>
-                        <div class="card-action">
-                            <span class="price" contenteditable="false">85 EGP</span>
-                            <button class="order-btn" id="btn-id-flatwhite" py-click="increment_qty" data-price="85" data-name="فلات وايت" data-qty="0">
-                                Order <span class="order-badge">0</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="section-block" id="block-cold">
-                <div class="section-header-wrap">
-                    <button class="delete-section-btn" py-click="delete_section">✕</button>
-                    <h2 class="section-title" contenteditable="false">المشروبات الباردة والمنعشة</h2>
-                </div>
-                <div id="cold-container" class="menu-grid">
-                    <div class="card glass-panel" id="item-coldbrew">
-                        <button class="delete-btn" py-click="delete_item">✕</button>
-                        <div class="card-img-wrapper">
-                            <img src="https://images.unsplash.com/photo-1517701550927-30cfcb64c584?w=600" class="card-img" alt="كولد برو">
-                        </div>
-                        <h3 class="card-title" contenteditable="false">كولد برو سيجنتشر</h3>
-                        <p class="card-desc" contenteditable="false">قهوة منقوعة بالماء البارد لمدة 24 ساعة، خالية من الحمضية، تقدم مع ثلج نقي.</p>
-                        <div class="card-action">
-                            <span class="price" contenteditable="false">95 EGP</span>
-                            <button class="order-btn" id="btn-id-coldbrew" py-click="increment_qty" data-price="95" data-name="كولد برو سيجنتشر" data-qty="0">
-                                Order <span class="order-badge">0</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+            <!-- سيتم تعبئة القائمة ديناميكياً عبر JSON أو البيانات الافتراضية -->
         </div>
 
         <aside>
@@ -852,7 +788,7 @@
 
     </main>
 
-    <!-- شاشة الترحيب الجديدة (بدون صورة، مع تأخير 5 ثوانٍ وهمي) -->
+    <!-- شاشة الترحيب (بدون صورة، إنجليزية، تأخير 5 ثوانٍ) -->
     <div id="welcome-modal" class="modal-overlay" style="display: flex;">
         <div class="glass-panel modal-box welcome-box">
             <h2>Welcome to CS MENU</h2>
@@ -875,18 +811,17 @@
 
     <script type="py">
         from pyscript import document, window
-        import pyodide
         import json
         import asyncio
+        import random
+        import time
+        from pyodide.http import pyfetch
 
         is_logged_in = False
         whatsapp_message_global = "" 
         usd_rate = 0.020 
 
-        # دالة إغلاق شاشة الترحيب مع تأخير 5 ثوانٍ (تديرها JavaScript خارجياً لتجنب تعقيد asyncio)
-        # سنقوم بربط حدث الزر من خلال JavaScript بدلاً من py-click لمنع تعارض.
-        # سنترك شاشة الترحيب تدار بواسطة JS pure لتكون أبسط وأسرع.
-
+        # ------------------- UTILITIES -------------------
         def setup_room_numbers():
             select_element = document.querySelector("#room-select")
             for room in range(101, 119):
@@ -917,11 +852,9 @@
         def remove_item_from_cart(event):
             target_id = event.target.closest(".remove-cart-btn").getAttribute("data-target-btn-id")
             associated_btn = document.querySelector(f"#{target_id}")
-            
             if associated_btn:
                 badge = associated_btn.querySelector(".order-badge")
                 current_qty = int(associated_btn.getAttribute("data-qty"))
-                
                 new_qty = current_qty - 1
                 if new_qty <= 0:
                     associated_btn.setAttribute("data-qty", "0")
@@ -930,7 +863,6 @@
                 else:
                     associated_btn.setAttribute("data-qty", str(new_qty))
                     badge.innerText = str(new_qty)
-                
                 calculate_bill(None)
 
         window.remove_item_from_cart = remove_item_from_cart
@@ -968,12 +900,12 @@
                 opt.value = grid_id
                 opt.text = title
                 cat_select.appendChild(opt)
-            
             if current_selection:
                 cat_select.value = current_selection
 
         window.pyscript_refresh_dropdown = refresh_categories_dropdown
 
+        # ------------------- AUTH / ADMIN MODE -------------------
         def toggle_auth_modal(event):
             global is_logged_in
             modal = document.querySelector("#login-modal")
@@ -987,7 +919,6 @@
                 document.body.classList.remove("admin-mode")
                 auth_btn.innerText = "إدارة القائمة"
                 subtitle.setAttribute("contenteditable", "false")
-                
                 titles = document.querySelectorAll(".section-title, .card-title, .card-desc, .price")
                 for t in titles:
                     t.setAttribute("contenteditable", "false")
@@ -1012,16 +943,15 @@
                 admin_panel.style.display = "block"
                 document.body.classList.add("admin-mode")
                 auth_btn.innerText = "إغلاق اللوحة ✕"
-                
                 subtitle.setAttribute("contenteditable", "true")
                 titles = document.querySelectorAll(".section-title, .card-title, .card-desc, .price")
                 for t in titles:
                     t.setAttribute("contenteditable", "true")
-                
                 refresh_categories_dropdown()
             else:
                 window.alert("رمز المرور غير صحيح.")
 
+        # ------------------- DELETE ITEM / SECTION -------------------
         def delete_item(event):
             card = event.target.closest(".card")
             if card:
@@ -1036,89 +966,16 @@
                 calculate_bill(None)
                 refresh_categories_dropdown()
 
+        # ------------------- CART / ORDER -------------------
         def increment_qty(event):
             btn = event.target.closest(".order-btn")
             badge = btn.querySelector(".order-badge")
-            
             current_qty = int(btn.getAttribute("data-qty"))
             new_qty = current_qty + 1
-            
             btn.setAttribute("data-qty", str(new_qty))
             badge.innerText = str(new_qty)
             badge.style.display = "flex"
-            
             calculate_bill(None)
-
-        def add_new_section(event):
-            title = document.querySelector("#new-section-title").value.strip()
-            if not title:
-                window.alert("الرجاء إدخال اسم القسم الجديد أولاً.")
-                return
-            
-            import random
-            rand_id = int(random.random() * 100000)
-            section_id = f"custom-container-{rand_id}"
-            
-            section_html = f'''
-            <div class="section-block">
-                <div class="section-header-wrap">
-                    <button class="delete-section-btn" py-click="delete_section">✕</button>
-                    <h2 class="section-title" contenteditable="false">{title}</h2>
-                </div>
-                <div id="{section_id}" class="menu-grid"></div>
-            </div>
-            '''
-            
-            document.querySelector("#main-menu-content").insertAdjacentHTML('beforeend', section_html)
-            document.querySelector("#new-section-title").value = ""
-            
-            refresh_categories_dropdown()
-            window.alert(f"تم إنشاء قسم '{title}' بنجاح.")
-
-        def add_new_item(event):
-            name = document.querySelector("#new-name").value.strip()
-            desc = document.querySelector("#new-desc").value.strip()
-            price = document.querySelector("#new-price").value.strip()
-            category = document.querySelector("#new-category").value
-            image_url = document.querySelector("#new-image-url").value.strip()
-
-            if not name or not price:
-                window.alert("الرجاء إدخال اسم المشروب وسعره.")
-                return
-
-            if not image_url:
-                image_url = "https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600"
-
-            import random
-            rand_btn_id = f"btn-rand-{int(random.random() * 100000)}"
-
-            card_html = f'''
-            <div class="card glass-panel">
-                <button class="delete-btn" py-click="delete_item">✕</button>
-                <div class="card-img-wrapper">
-                    <img src="{image_url}" class="card-img" alt="{name}" onerror="this.src='https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600'">
-                </div>
-                <h3 class="card-title" contenteditable="false">{name}</h3>
-                <p class="card-desc" contenteditable="false">{desc if desc else "مزيج فاخر محضر بعناية تامة ليناسب ذائقتك."}</p>
-                <div class="card-action">
-                    <span class="price" contenteditable="false">{price} EGP</span>
-                    <button class="order-btn" id="{rand_btn_id}" py-click="increment_qty" data-price="{price}" data-name="{name}" data-qty="0">
-                        Order <span class="order-badge">0</span>
-                    </button>
-                </div>
-            </div>
-            '''
-
-            try:
-                document.querySelector(f"#{category}").insertAdjacentHTML('beforeend', card_html)
-                window.alert("تمت إضافة المشروب بنجاح.")
-            except Exception as e:
-                window.alert("عذراً، حدث خطأ أثناء تحديد القسم.")
-
-            document.querySelector("#new-name").value = ""
-            document.querySelector("#new-desc").value = ""
-            document.querySelector("#new-price").value = ""
-            document.querySelector("#new-image-url").value = ""
 
         def calculate_bill(event):
             global whatsapp_message_global, usd_rate
@@ -1130,19 +987,16 @@
             for btn in order_buttons:
                 card = btn.closest(".card")
                 current_name = card.querySelector(".card-title").innerText.strip() if card else btn.getAttribute("data-name")
-                
                 try:
                     price_text = card.querySelector(".price").innerText.replace("EGP", "").strip() if card else btn.getAttribute("data-price")
                     current_price = int(''.join(filter(str.isdigit, price_text)))
                 except:
                     current_price = int(btn.getAttribute("data-price"))
-                
                 qty = int(btn.getAttribute("data-qty"))
                 if qty > 0:
                     btn_id = btn.getAttribute("id")
                     item_total = qty * current_price
                     total += item_total
-                    
                     summary_html += f'''
                     <div class="bill-item">
                         <div class="bill-item-details">
@@ -1167,14 +1021,11 @@
                 total_usd = round(total * usd_rate, 2)
                 whatsapp_text += f"\n💰 *Total Bill:* {total} EGP (~ {total_usd} USD)"
                 whatsapp_message_global = whatsapp_text
-                
                 summary_div.innerHTML = summary_html
                 total_span.innerText = f"{total} EGP"
                 usd_span.innerText = f"~ {total_usd} USD"
-                
                 result_box.style.display = "block"
                 whatsapp_btn.style.display = "block"
-                
                 on_room_change_handler()
             else:
                 whatsapp_message_global = ""
@@ -1201,79 +1052,296 @@
             encoded_msg = window.encodeURIComponent(final_msg)
             whatsapp_url = f"https://wa.me/201500950515?text={encoded_msg}"
             window.open(whatsapp_url, "_blank")
+
+        # ------------------- ADD / EDIT SECTIONS & ITEMS -------------------
+        def add_new_section(event):
+            title = document.querySelector("#new-section-title").value.strip()
+            if not title:
+                window.alert("الرجاء إدخال اسم القسم الجديد أولاً.")
+                return
+            rand_id = int(random.random() * 100000)
+            section_id = f"custom-container-{rand_id}"
+            section_html = f'''
+            <div class="section-block">
+                <div class="section-header-wrap">
+                    <button class="delete-section-btn" py-click="delete_section">✕</button>
+                    <h2 class="section-title" contenteditable="false">{title}</h2>
+                </div>
+                <div id="{section_id}" class="menu-grid"></div>
+            </div>
+            '''
+            document.querySelector("#main-menu-content").insertAdjacentHTML('beforeend', section_html)
+            document.querySelector("#new-section-title").value = ""
+            refresh_categories_dropdown()
+            window.alert(f"تم إنشاء قسم '{title}' بنجاح.")
+
+        def add_new_item(event):
+            name = document.querySelector("#new-name").value.strip()
+            desc = document.querySelector("#new-desc").value.strip()
+            price = document.querySelector("#new-price").value.strip()
+            category = document.querySelector("#new-category").value
+            image_url = document.querySelector("#new-image-url").value.strip()
+            if not name or not price:
+                window.alert("الرجاء إدخال اسم المشروب وسعره.")
+                return
+            if not image_url:
+                image_url = "https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600"
+            rand_btn_id = f"btn-rand-{int(random.random() * 100000)}"
+            card_html = f'''
+            <div class="card glass-panel">
+                <button class="delete-btn" py-click="delete_item">✕</button>
+                <div class="card-img-wrapper">
+                    <img src="{image_url}" class="card-img" alt="{name}" onerror="this.src='https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600'">
+                </div>
+                <h3 class="card-title" contenteditable="false">{name}</h3>
+                <p class="card-desc" contenteditable="false">{desc if desc else "مزيج فاخر محضر بعناية تامة ليناسب ذائقتك."}</p>
+                <div class="card-action">
+                    <span class="price" contenteditable="false">{price} EGP</span>
+                    <button class="order-btn" id="{rand_btn_id}" py-click="increment_qty" data-price="{price}" data-name="{name}" data-qty="0">
+                        Order <span class="order-badge">0</span>
+                    </button>
+                </div>
+            </div>
+            '''
+            try:
+                document.querySelector(f"#{category}").insertAdjacentHTML('beforeend', card_html)
+                window.alert("تمت إضافة المشروب بنجاح.")
+            except Exception as e:
+                window.alert("عذراً، حدث خطأ أثناء تحديد القسم.")
+            document.querySelector("#new-name").value = ""
+            document.querySelector("#new-desc").value = ""
+            document.querySelector("#new-price").value = ""
+            document.querySelector("#new-image-url").value = ""
+
+        # ------------------- JSON EXPORT / IMPORT / REFRESH -------------------
+        def rebuild_menu_from_json(data):
+            menu_container = document.querySelector("#main-menu-content")
+            menu_container.innerHTML = ""
+            for sec in data.get("sections", []):
+                title = sec["title"]
+                container_id = sec.get("container_id", f"section-{int(time.time())}-{random.randint(1,1000)}")
+                section_div = document.createElement("div")
+                section_div.className = "section-block"
+                header_div = document.createElement("div")
+                header_div.className = "section-header-wrap"
+                del_btn = document.createElement("button")
+                del_btn.className = "delete-section-btn"
+                del_btn.setAttribute("py-click", "delete_section")
+                del_btn.innerText = "✕"
+                title_h2 = document.createElement("h2")
+                title_h2.className = "section-title"
+                title_h2.setAttribute("contenteditable", "false")
+                title_h2.innerText = title
+                header_div.appendChild(del_btn)
+                header_div.appendChild(title_h2)
+                grid_div = document.createElement("div")
+                grid_div.className = "menu-grid"
+                grid_div.id = container_id
+                section_div.appendChild(header_div)
+                section_div.appendChild(grid_div)
+                menu_container.appendChild(section_div)
+                for item in sec.get("items", []):
+                    rand_btn_id = f"btn-import-{int(random.random() * 100000)}"
+                    img_url = item.get('image', 'https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600')
+                    card_html = f'''
+                    <div class="card glass-panel">
+                        <button class="delete-btn" py-click="delete_item">✕</button>
+                        <div class="card-img-wrapper">
+                            <img src="{img_url}" class="card-img" alt="{item['name']}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600'">
+                        </div>
+                        <h3 class="card-title" contenteditable="false">{item['name']}</h3>
+                        <p class="card-desc" contenteditable="false">{item['desc']}</p>
+                        <div class="card-action">
+                            <span class="price" contenteditable="false">{item['price']} EGP</span>
+                            <button class="order-btn" id="{rand_btn_id}" py-click="increment_qty" data-price="{item['price']}" data-name="{item['name']}" data-qty="0">
+                                Order <span class="order-badge">0</span>
+                            </button>
+                        </div>
+                    </div>
+                    '''
+                    grid_div.insertAdjacentHTML('beforeend', card_html)
+            # تحديث القائمة المنسدلة للأقسام
+            refresh_categories_dropdown()
+
+        def export_menu_to_json(event):
+            sections = document.querySelectorAll("#main-menu-content > .section-block")
+            data = {"sections": []}
+            for section in sections:
+                title_elem = section.querySelector(".section-title")
+                title = title_elem.innerText.strip() if title_elem else "بدون عنوان"
+                grid = section.querySelector(".menu-grid")
+                container_id = grid.getAttribute("id") if grid else None
+                items = []
+                cards = section.querySelectorAll(".card")
+                for card in cards:
+                    name = card.querySelector(".card-title").innerText.strip()
+                    desc = card.querySelector(".card-desc").innerText.strip()
+                    price_text = card.querySelector(".price").innerText.strip()
+                    price = int(''.join(filter(str.isdigit, price_text)))
+                    img = card.querySelector(".card-img").getAttribute("src")
+                    items.append({
+                        "name": name,
+                        "desc": desc,
+                        "price": price,
+                        "image": img
+                    })
+                data["sections"].append({
+                    "title": title,
+                    "container_id": container_id,
+                    "items": items
+                })
+            json_str = json.dumps(data, ensure_ascii=False, indent=2)
+            blob = window.Blob.new([json_str], {type: "application/json"})
+            url = window.URL.createObjectURL(blob)
+            a = window.document.createElement("a")
+            a.href = url
+            a.download = "menu_backup.json"
+            window.document.body.appendChild(a)
+            a.click()
+            window.document.body.removeChild(a)
+            window.URL.revokeObjectURL(url)
+            window.alert("✅ تم تصدير القائمة بنجاح! ملف 'menu_backup.json' جاهز للتنزيل.")
+
+        def import_menu_from_json(event):
+            input_el = window.document.createElement("input")
+            input_el.type = "file"
+            input_el.accept = "application/json"
+            def on_file_selected(e):
+                file = input_el.files[0]
+                if not file:
+                    return
+                reader = window.FileReader.new()
+                def on_load(e):
+                    try:
+                        data = json.loads(reader.result)
+                        rebuild_menu_from_json(data)
+                        window.alert("✅ تم استيراد القائمة بنجاح!")
+                        if is_logged_in:
+                            titles = document.querySelectorAll(".section-title, .card-title, .card-desc, .price")
+                            for t in titles:
+                                t.setAttribute("contenteditable", "true")
+                    except Exception as err:
+                        window.alert("خطأ في ملف JSON: " + str(err))
+                reader.onload = on_load
+                reader.readAsText(file)
+            input_el.addEventListener("change", on_file_selected)
+            input_el.click()
+
+        async def refresh_from_json(event):
+            try:
+                response = await pyfetch(f"menu.json?t={int(time.time())}", cache="no-store")
+                if response.status == 200:
+                    data = await response.json()
+                    rebuild_menu_from_json(data)
+                    window.alert("✅ تم تحديث القائمة من ملف menu.json!")
+                    if is_logged_in:
+                        titles = document.querySelectorAll(".section-title, .card-title, .card-desc, .price")
+                        for t in titles:
+                            t.setAttribute("contenteditable", "true")
+                else:
+                    window.alert("❌ فشل تحميل menu.json. تأكد من وجود الملف.")
+            except Exception as e:
+                window.alert(f"خطأ: {str(e)}")
+
+        async def load_initial_menu():
+            """محاولة تحميل menu.json، وإلا استخدام البيانات الافتراضية (الموجودة في HTML الأصلي)"""
+            try:
+                response = await pyfetch(f"menu.json?t={int(time.time())}", cache="no-store")
+                if response.status == 200:
+                    data = await response.json()
+                    rebuild_menu_from_json(data)
+                    print("✅ تم تحميل القائمة من menu.json")
+                    return
+            except Exception as e:
+                print("لم يتم العثور على menu.json، سيتم استخدام البيانات الافتراضية.")
+            # البيانات الافتراضية (نفس الموجودة في HTML الأصلي)
+            default_data = {
+                "sections": [
+                    {
+                        "title": "القهوة المقطرة والساخنة",
+                        "container_id": "hot-container",
+                        "items": [
+                            {"name": "كيميكس كولومبي", "desc": "قهوة مختصة مقطرة بأداة الكيميكس، تتميز بقوام نقي وإيحاءات الكراميل والشوكولاتة الداكنة.", "price": 120, "image": "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=600"},
+                            {"name": "فلات وايت", "desc": "إسبريسو غني مع طبقة رقيقة من الحليب المبخر بسلاسة فائقة، لقوام مخملي متوازن.", "price": 85, "image": "https://images.unsplash.com/photo-1541167760496-1628856ab772?w=600"}
+                        ]
+                    },
+                    {
+                        "title": "المشروبات الباردة والمنعشة",
+                        "container_id": "cold-container",
+                        "items": [
+                            {"name": "كولد برو سيجنتشر", "desc": "قهوة منقوعة بالماء البارد لمدة 24 ساعة، خالية من الحمضية، تقدم مع ثلج نقي.", "price": 95, "image": "https://images.unsplash.com/photo-1517701550927-30cfcb64c584?w=600"}
+                        ]
+                    }
+                ]
+            }
+            rebuild_menu_from_json(default_data)
+            print("✅ تم تحميل القائمة الافتراضية")
+
+        # ------------------- RUN INIT -------------------
+        asyncio.ensure_future(load_initial_menu())
     </script>
 
-<script>
-// إدارة شاشة الترحيب مع تأخير 5 ثوانٍ وهمي
-document.addEventListener('DOMContentLoaded', () => {
-    const welcomeModal = document.getElementById('welcome-modal');
-    const exploreBtn = document.getElementById('explore-btn');
-    const waitingDiv = document.getElementById('waiting-message');
-    const counterSpan = waitingDiv.querySelector('.counter');
-    let countdownInterval = null;
+    <script>
+        // شاشة الترحيب مع تأخير 5 ثوانٍ
+        document.addEventListener('DOMContentLoaded', () => {
+            const welcomeModal = document.getElementById('welcome-modal');
+            const exploreBtn = document.getElementById('explore-btn');
+            const waitingDiv = document.getElementById('waiting-message');
+            const counterSpan = waitingDiv.querySelector('.counter');
+            let countdownInterval = null;
 
-    exploreBtn.addEventListener('click', () => {
-        // تعطيل الزر لمنع الضغط المتكرر
-        exploreBtn.disabled = true;
-        // إظهار رسالة الانتظار
-        waitingDiv.style.display = 'block';
-        let secondsLeft = 5;
-        counterSpan.innerText = secondsLeft;
-        
-        countdownInterval = setInterval(() => {
-            secondsLeft--;
-            counterSpan.innerText = secondsLeft;
-            if (secondsLeft <= 0) {
-                clearInterval(countdownInterval);
-                // إغلاق الشاشة
-                welcomeModal.style.display = 'none';
-                // إعادة تعيين الحالة (في حال فتحها مرة أخرى في نفس الجلسة - غير متوقع لكن للاحتياط)
-                exploreBtn.disabled = false;
-                waitingDiv.style.display = 'none';
-                counterSpan.innerText = '5';
+            exploreBtn.addEventListener('click', () => {
+                exploreBtn.disabled = true;
+                waitingDiv.style.display = 'block';
+                let secondsLeft = 5;
+                counterSpan.innerText = secondsLeft;
+                countdownInterval = setInterval(() => {
+                    secondsLeft--;
+                    counterSpan.innerText = secondsLeft;
+                    if (secondsLeft <= 0) {
+                        clearInterval(countdownInterval);
+                        welcomeModal.style.display = 'none';
+                        exploreBtn.disabled = false;
+                        waitingDiv.style.display = 'none';
+                        counterSpan.innerText = '5';
+                    }
+                }, 1000);
+            });
+        });
+    </script>
+
+    <script>
+        // حفظ البيانات تلقائياً في localStorage (احتياطي للمشرف)
+        function saveSiteData(){
+            if(document.body.classList.contains('admin-mode')){
+                localStorage.setItem('cs_cafe_full_content', document.querySelector('#main-menu-content').innerHTML);
+                localStorage.setItem('cs_cafe_subtitle', document.querySelector('#cafe-subtitle').innerHTML);
             }
-        }, 1000);
-    });
-});
-</script>
-
-<script>
-// === نظام الحفظ الذكي التلقائي (للإدارة فقط) ===
-function saveSiteData(){
-  if(document.body.classList.contains('admin-mode')){
-    localStorage.setItem('cs_cafe_full_content', document.querySelector('#main-menu-content').innerHTML);
-    localStorage.setItem('cs_cafe_subtitle', document.querySelector('#cafe-subtitle').innerHTML);
-  }
-}
-
-function loadSiteData(){
-  const content = localStorage.getItem('cs_cafe_full_content');
-  if(content){ 
-    document.querySelector('#main-menu-content').innerHTML = content; 
-  }
-  const sub = localStorage.getItem('cs_cafe_subtitle');
-  if(sub){ 
-    document.querySelector('#cafe-subtitle').innerHTML = sub; 
-  }
-}
-
-document.addEventListener('DOMContentLoaded', ()=>{
-  loadSiteData();
-  setInterval(saveSiteData, 1500);
-  document.body.addEventListener('input', ()=>saveSiteData());
-});
-</script>
-
-<script>
-// تحديث خيارات الأقسام عند تحميل الصفحة
-document.addEventListener('DOMContentLoaded', ()=>{
-  setTimeout(()=>{
-    if(window.pyscript_refresh_dropdown) {
-      window.pyscript_refresh_dropdown();
-    }
-  }, 1500);
-});
-</script>
+        }
+        function loadSiteData(){
+            const content = localStorage.getItem('cs_cafe_full_content');
+            if(content && !document.querySelector('#main-menu-content').children.length){ 
+                document.querySelector('#main-menu-content').innerHTML = content; 
+            }
+            const sub = localStorage.getItem('cs_cafe_subtitle');
+            if(sub){ 
+                document.querySelector('#cafe-subtitle').innerHTML = sub; 
+            }
+        }
+        document.addEventListener('DOMContentLoaded', ()=>{
+            loadSiteData();
+            setInterval(saveSiteData, 1500);
+            document.body.addEventListener('input', ()=>saveSiteData());
+        });
+        // تحديث القائمة المنسدلة
+        document.addEventListener('DOMContentLoaded', ()=>{
+            setTimeout(()=>{
+                if(window.pyscript_refresh_dropdown) {
+                    window.pyscript_refresh_dropdown();
+                }
+            }, 1500);
+        });
+    </script>
 
 </body>
 </html>
