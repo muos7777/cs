@@ -1,1 +1,94 @@
-11
+{
+  "sections": [
+    {
+      "title": "مشروبات ساخنه |",
+      "container_id": "hot-container",
+      "items": [
+        {
+          "name": "قهوة تركي | Turkish coffee",
+          "desc": ".",
+          "price": 30,
+          "image": "https://i.ytimg.com/vi/hwbhA31qSYk/maxresdefault.jpg"
+        },
+        {
+          "name": "شاي مصري | Egyptian tea",
+          "desc": ".",
+          "price": 25,
+          "image": "https://i.ytimg.com/vi/BFoUzKnDqIo/hqdefault.jpg"
+        },
+        {
+          "name": "شاي حليب | milk tea",
+          "desc": ".",
+          "price": 30,
+          "image": "https://img.lahloba.com/news/large/f329ccdd-2d01-4389-bea9-0b67cbed2848.jpeg"
+        },
+        {
+          "name": "شاي ليبتون | Lipton tea",
+          "desc": ".",
+          "price": 25,
+          "image": "https://avatars.mds.yandex.net/i?id=fccab87d002771dcf4e964ddeaea1970_l-5219999-images-thumbs&ref=rim&n=13&w=2000&h=1325"
+        },
+        {
+          "name": "نسكافيه بلاك | Nescafé Black",
+          "desc": ".",
+          "price": 30,
+          "image": "https://avatars.mds.yandex.net/i?id=2b5437af593f5b6efd92015461bc9277_l-5179158-images-thumbs&ref=rim&n=13&w=900&h=900"
+        },
+        {
+          "name": "نسكافيه جولد | Nescafe Gold",
+          "desc": ".",
+          "price": 35,
+          "image": "https://cdn.salla.sa/mEGGZ/YTD482xcaDBdbw9KVhOUssup3Qrxwkbm5Cy0r9Gy.jpg"
+        }
+      ]
+    },
+    {
+      "title": "تدخين | smoking",
+      "container_id": "custom-container-8851",
+      "items": [
+        {
+          "name": "طفايه سجائر | ashtray",
+          "desc": ".",
+          "price": 0,
+          "image": "https://i.pinimg.com/736x/5f/8d/4f/5f8d4ffb2f28e9c614b94b6c35b45ac7.jpg"
+        },
+        {
+          "name": "LM RED\\BLUE",
+          "desc": ".",
+          "price": 100,
+          "image": "https://1000logos.net/wp-content/uploads/2020/09/LM-Logo.png"
+        },
+        {
+          "name": "Marlboro",
+          "desc": ".",
+          "price": 120,
+          "image": "https://sintrafucarb.com.br/wp-content/uploads/2022/10/marlboro.jpg"
+        },
+        {
+          "name": "winston",
+          "desc": ".",
+          "price": 120,
+          "image": "https://images.seeklogo.com/logo-png/47/2/winston-logo-png_seeklogo-475901.png"
+        }
+      ]
+    },
+    {
+      "title": "خدمة الغرف | room service",
+      "container_id": "custom-container-30643",
+      "items": [
+        {
+          "name": "منشفه وجه | Face towel",
+          "desc": ".",
+          "price": 0,
+          "image": "https://img-edg.joomcdn.net/1f2409287732585efdcfbebe2a258dd62b1af46c_original.jpeg"
+        },
+        {
+          "name": "منشفه كبيرة | large towel",
+          "desc": ".",
+          "price": 0,
+          "image": "https://cdn2.static1-sima-land.com/items/7306719/2/700-nw.jpg"
+        }
+      ]
+    }
+  ]
+}
