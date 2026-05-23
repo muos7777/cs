@@ -906,16 +906,14 @@
         "message": "استمتع بأجمل المشروبات المختصة والخدمات الفاخرة.",
         "images": ["https://i.ibb.co/sdKVjdsm/Chat-GPT-Image-11-2026-01-15-34.png"]
     }
+    menu_loaded = False
 
     # ------------------- تحسين الصور -------------------
     def optimize_image_url(url, width=400):
-        """تحويل أي رابط صورة إلى نسخة مصغرة عبر images.weserv.nl لتسريع التحميل"""
         if not url or url.startswith('data:'):
             return url
-        # تجنب تحسين الصور التي تم تحسينها مسبقاً (تجنب الحلقات)
-        if 'images.weserv.nl' in url or 'resizing' in url:
+        if 'images.weserv.nl' in url:
             return url
-        # ترميز الرابط
         import urllib.parse
         encoded = urllib.parse.quote(url, safe='')
         return f"https://images.weserv.nl/?url={encoded}&w={width}&h={width}&fit=cover&q=85"
@@ -1220,19 +1218,21 @@
         document.querySelector("#new-price").value = ""
         document.querySelector("#new-image-url").value = ""
 
-    # ------------------- WELCOME MANAGEMENT -------------------
+    # ------------------- WELCOME MANAGEMENT (FIXED) -------------------
     def refresh_welcome_admin_panel():
         container = document.querySelector("#welcome-images-list")
         container.innerHTML = ""
         for idx, img_url in enumerate(welcome_data["images"]):
             div = document.createElement("div")
             div.className = "welcome-image-item"
+            # نستخدم زر عادي مع onclick مباشر لتجنب مشاكل py-click
             div.innerHTML = f'''
                 <img src="{optimize_image_url(img_url, 100)}" style="width:80px; height:80px; object-fit:cover; border-radius:8px;">
-                <button class="delete-welcome-img btn-solid" data-index="{idx}" style="margin-top:5px; padding:4px 8px; font-size:12px;">✕ حذف</button>
+                <button class="delete-welcome-img-btn btn-solid" data-index="{idx}" style="margin-top:5px; padding:4px 8px; font-size:12px;">✕ حذف</button>
             '''
             container.appendChild(div)
-        for btn in document.querySelectorAll(".delete-welcome-img"):
+        # ربط الأحداث باستخدام addEventListener العادي
+        for btn in document.querySelectorAll(".delete-welcome-img-btn"):
             btn.addEventListener("click", lambda e, idx=int(btn.getAttribute("data-index")): delete_welcome_image(idx))
 
     def delete_welcome_image(index):
@@ -1263,18 +1263,17 @@
             welcome_data["message"] = msg
         window.alert("تم حفظ إعدادات الترحيب مؤقتاً، قم بتصدير JSON لحفظها نهائياً.")
 
-    def show_welcome_screen():
+    async def show_welcome_screen():
         title_el = document.querySelector("#welcome-screen-title")
         msg_el = document.querySelector("#welcome-screen-message")
         images_container = document.querySelector("#welcome-screen-images")
         title_el.innerText = welcome_data.get("title", "مرحباً")
         msg_el.innerText = welcome_data.get("message", "استمتع بأجمل المشروبات")
-        # إظهار الـ spinner أثناء التحميل
         images_container.innerHTML = '<div class="spinner"></div>'
         screen = document.querySelector("#welcome-screen")
         screen.style.display = "flex"
         
-        # تحميل الصور بشكل غير متزامن مع تحسين
+        # تحميل الصور بشكل غير متزامن
         async def load_images():
             img_urls = welcome_data.get("images", [])
             if not img_urls:
@@ -1311,7 +1310,6 @@
                 price_text = card.querySelector(".price").innerText.strip()
                 price = int(''.join(filter(str.isdigit, price_text)))
                 img = card.querySelector(".card-img").getAttribute("src")
-                # لا نحتاج لحفظ الرابط المحسن، نحفظ الرابط الأصلي إن وجد
                 items.append({
                     "name": name,
                     "desc": desc,
@@ -1344,6 +1342,7 @@
         window.alert("✅ تم تصدير القائمة مع الترحيب بنجاح!")
 
     def rebuild_menu_from_json(data):
+        global welcome_data
         menu_container = document.querySelector("#main-menu-content")
         menu_container.innerHTML = ""
         for sec in data.get("sections", []):
@@ -1391,7 +1390,6 @@
                 '''
                 grid_div.insertAdjacentHTML('beforeend', card_html)
         if "welcome" in data:
-            global welcome_data
             welcome_data = data["welcome"]
             if document.querySelector("#welcome-title"):
                 document.querySelector("#welcome-title").value = welcome_data.get("title", "")
@@ -1442,7 +1440,13 @@
         except Exception as e:
             window.alert(f"خطأ: {str(e)}")
 
+    # ------------------- LOAD INITIAL MENU (FAST WELCOME FIRST) -------------------
     async def load_initial_menu():
+        # أولاً: عرض شاشة الترحيب فوراً (بيانات افتراضية)
+        if not window.localStorage.getItem("welcomeShown"):
+            await show_welcome_screen()
+            window.localStorage.setItem("welcomeShown", "true")
+        # ثم تحميل القائمة في الخلفية
         try:
             response = await pyfetch(f"menu.json?t={int(time.time())}", cache="no-store")
             if response.status == 200:
@@ -1470,9 +1474,6 @@
                 }
             }
             rebuild_menu_from_json(default_data)
-        if not window.localStorage.getItem("welcomeShown"):
-            show_welcome_screen()
-            window.localStorage.setItem("welcomeShown", "true")
 
     asyncio.ensure_future(load_initial_menu())
 </script>
