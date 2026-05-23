@@ -23,22 +23,34 @@
           "image": "https://img.lahloba.com/news/large/f329ccdd-2d01-4389-bea9-0b67cbed2848.jpeg"
         },
         {
-          "name": "شاي ليبتون | Lipton tea",
-          "desc": ".",
-          "price": 25,
-          "image": "https://avatars.mds.yandex.net/i?id=fccab87d002771dcf4e964ddeaea1970_l-5219999-images-thumbs&ref=rim&n=13&w=2000&h=1325"
-        },
-        {
-          "name": "نسكافيه بلاك | Nescafé Black",
+          "name": "قهوة سريعة التحضير (سادة) | Instant Coffee : Black Coffee",
           "desc": ".",
           "price": 30,
-          "image": "https://avatars.mds.yandex.net/i?id=2b5437af593f5b6efd92015461bc9277_l-5179158-images-thumbs&ref=rim&n=13&w=900&h=900"
+          "image": "https://backend.abuauf.com/wp-content/uploads/2024/08/6223004760204-1.webp"
         },
         {
-          "name": "نسكافيه جولد | Nescafe Gold",
+          "name": "قهوة بالحليب | Coffee with Creamer",
           "desc": ".",
           "price": 35,
-          "image": "https://cdn.salla.sa/mEGGZ/YTD482xcaDBdbw9KVhOUssup3Qrxwkbm5Cy0r9Gy.jpg"
+          "image": "https://www.allrecipes.com/thmb/I7P8QzPSX3BVaaEecmzWFFU9R2s=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/8745437-Date-Based-Coffee-Creamer-Allrecipes-Magazine-4x3-2e8a48b86fca47b78e78119cf3e0b43e.jpg"
+        },
+        {
+          "name": "قهوة بالبندق | Hazelnut Flavored Coffee",
+          "desc": ".",
+          "price": 40,
+          "image": "https://koala.sh/api/image/v2-1tsu4-l6eid.jpg?width=1216&height=832&dream"
+        },
+        {
+          "name": "Caramel Flavored Coffee | قهوة بالكراميل",
+          "desc": ".",
+          "price": 35,
+          "image": "https://foxeslovelemons.com/wp-content/uploads/2023/03/Caramel-Coffee-7.jpg"
+        },
+        {
+          "name": "Cappuccino | كابتشينو",
+          "desc": ".",
+          "price": 30,
+          "image": "https://www.cuisinart.com/dw/image/v2/ABAF_PRD/on/demandware.static/-/Sites-us-cuisinart-sfra-Library/default/dw30047d66/images/recipe-Images/cappuccino1-recipe.jpg?sw=1200&sh=1200&sm=fit"
         }
       ]
     },
@@ -51,24 +63,6 @@
           "desc": ".",
           "price": 0,
           "image": "https://i.pinimg.com/736x/5f/8d/4f/5f8d4ffb2f28e9c614b94b6c35b45ac7.jpg"
-        },
-        {
-          "name": "LM RED\\BLUE",
-          "desc": ".",
-          "price": 100,
-          "image": "https://1000logos.net/wp-content/uploads/2020/09/LM-Logo.png"
-        },
-        {
-          "name": "Marlboro",
-          "desc": ".",
-          "price": 120,
-          "image": "https://sintrafucarb.com.br/wp-content/uploads/2022/10/marlboro.jpg"
-        },
-        {
-          "name": "winston",
-          "desc": ".",
-          "price": 120,
-          "image": "https://images.seeklogo.com/logo-png/47/2/winston-logo-png_seeklogo-475901.png"
         }
       ]
     },
