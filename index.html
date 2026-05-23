@@ -604,6 +604,94 @@
             background: #20ba5a !important;
         }
 
+        /* أنماط شاشة الترحيب */
+        .welcome-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(12px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            visibility: visible;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+        .welcome-box {
+            max-width: 800px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 25px;
+            text-align: center;
+            position: relative;
+        }
+        .welcome-images {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+            min-height: 100px;
+        }
+        .welcome-image {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
+            transition: transform 0.3s;
+        }
+        .welcome-image:hover {
+            transform: scale(1.05);
+        }
+        .welcome-title {
+            font-size: 28px;
+            font-weight: 800;
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+        .welcome-message {
+            color: var(--text-dim);
+            font-size: 16px;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .close-welcome {
+            margin-top: 20px;
+        }
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(212,175,55,0.3);
+            border-radius: 50%;
+            border-top-color: var(--gold-accent);
+            animation: spin 1s ease-in-out infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        /* إدارة الصور في وضع الإدارة */
+        .welcome-image-item {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 10px;
+            background: rgba(0,0,0,0.5);
+            padding: 8px;
+            border-radius: 12px;
+        }
+        .welcome-image-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -678,6 +766,32 @@
             <button class="btn-solid" py-click="add_new_section">إنشاء القسم فوراً</button>
         </div>
 
+        <h2>🎨 تخصيص شاشة الترحيب ✦</h2>
+        <div class="admin-grid" style="margin-bottom: 15px;">
+            <div class="input-group">
+                <label>عنوان الترحيب</label>
+                <input type="text" id="welcome-title" class="premium-input" placeholder="أهلاً بك في CS MENU">
+            </div>
+            <div class="input-group">
+                <label>نص الترحيب</label>
+                <input type="text" id="welcome-message" class="premium-input" placeholder="اكتشف أجمل المشروبات...">
+            </div>
+            <div class="input-group" style="grid-column: span 2;">
+                <label>إضافة صورة جديدة (رابط URL)</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="url" id="new-welcome-img" class="premium-input" placeholder="https://example.com/image.jpg">
+                    <button class="btn-solid" py-click="add_welcome_image">+ إضافة صورة</button>
+                </div>
+            </div>
+        </div>
+        <div id="welcome-images-list" style="display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 16px;">
+            <!-- ستظهر الصور هنا ديناميكياً للإدارة -->
+        </div>
+        <div class="admin-grid">
+            <button class="btn-solid" py-click="preview_welcome_modal">👁️ معاينة شاشة الترحيب</button>
+            <button class="btn-solid" py-click="save_welcome_to_json">💾 حفظ الترحيب في القائمة</button>
+        </div>
+
         <h2>أداة تخصيص الأبعاد والمواقع الذكية ✦</h2>
         <div class="admin-grid">
             <div class="input-group">
@@ -710,10 +824,12 @@
 
         <h2>📁 تصدير / استيراد / تحديث JSON ✦</h2>
         <div class="admin-grid" style="margin-top: 10px;">
-            <button class="btn-solid" py-click="refresh_from_json"> (تحديث) </button>
-            <button class="btn-solid" py-click="export_menu_to_json"> (تنزيل) </button>
+            <button class="btn-solid" py-click="refresh_from_json">🔄 تحديث القائمة من الملف (menu.json)</button>
+            <button class="btn-solid" py-click="export_menu_to_json">📥 تصدير القائمة إلى JSON (تنزيل)</button>
+            <button class="btn-solid" py-click="import_menu_from_json">📂 استيراد القائمة من ملف JSON</button>
         </div>
-        <p style="font-size: 12px; color: var(--text-dim); margin-top: 5px;">متنساش تعمل Save .</p>
+        <p style="font-size: 12px; color: var(--text-dim); margin-top: 5px;">⚠️ التحديث من الملف: يسترجع أحدث إصدار من menu.json (مع الترحيب والصور).<br>
+        📥 التصدير: ينشئ ملف backup يمكنك رفعه على GitHub كـ menu.json ليصبح متاحاً للجميع.</p>
     </div>
 
     <div class="menu-content" id="main-menu-content">
@@ -753,6 +869,18 @@
     </aside>
 </main>
 
+<!-- شاشة الترحيب المتغيرة -->
+<div id="welcome-screen" class="welcome-overlay" style="display: none;">
+    <div class="glass-panel welcome-box">
+        <h2 id="welcome-screen-title" class="welcome-title">مرحباً في CS MENU</h2>
+        <div id="welcome-screen-message" class="welcome-message">استمتع بأجمل المشروبات</div>
+        <div id="welcome-screen-images" class="welcome-images">
+            <div class="spinner"></div>
+        </div>
+        <button id="close-welcome-btn" class="btn-solid close-welcome" py-click="close_welcome_screen">ابدأ الاستكشاف</button>
+    </div>
+</div>
+
 <div id="login-modal" class="modal-overlay">
     <div class="glass-panel modal-box">
         <h3>صلاحيات الإدارة</h3>
@@ -773,7 +901,25 @@
     is_logged_in = False
     whatsapp_message_global = "" 
     usd_rate = 0.020 
+    welcome_data = {
+        "title": "مرحباً في CS MENU",
+        "message": "استمتع بأجمل المشروبات المختصة والخدمات الفاخرة.",
+        "images": ["https://i.ibb.co/sdKVjdsm/Chat-GPT-Image-11-2026-01-15-34.png"]
+    }
 
+    # ------------------- تحسين الصور -------------------
+    def optimize_image_url(url, width=400):
+        """تحويل أي رابط صورة إلى نسخة مصغرة عبر images.weserv.nl لتسريع التحميل"""
+        if not url or url.startswith('data:'):
+            return url
+        # تجنب تحسين الصور التي تم تحسينها مسبقاً (تجنب الحلقات)
+        if 'images.weserv.nl' in url or 'resizing' in url:
+            return url
+        # ترميز الرابط
+        import urllib.parse
+        encoded = urllib.parse.quote(url, safe='')
+        return f"https://images.weserv.nl/?url={encoded}&w={width}&h={width}&fit=cover&q=85"
+    
     # ------------------- UTILITIES -------------------
     def setup_room_numbers():
         select_element = document.querySelector("#room-select")
@@ -901,6 +1047,7 @@
             for t in titles:
                 t.setAttribute("contenteditable", "true")
             refresh_categories_dropdown()
+            refresh_welcome_admin_panel()
         else:
             window.alert("رمز المرور غير صحيح.")
 
@@ -988,6 +1135,10 @@
             result_box.style.display = "block"
             whatsapp_btn.style.display = "none"
 
+    def play_notification_sound():
+        audio = window.Audio.new("https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3")
+        audio.play()
+
     def send_to_whatsapp(event):
         global whatsapp_message_global
         room_val = document.querySelector("#room-select").value
@@ -1005,6 +1156,7 @@
         encoded_msg = window.encodeURIComponent(final_msg)
         whatsapp_url = f"https://wa.me/201500950515?text={encoded_msg}"
         window.open(whatsapp_url, "_blank")
+        play_notification_sound()
 
     # ------------------- ADD / EDIT SECTIONS & ITEMS -------------------
     def add_new_section(event):
@@ -1040,12 +1192,13 @@
             return
         if not image_url:
             image_url = "https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600"
+        optimized_img = optimize_image_url(image_url, 400)
         rand_btn_id = f"btn-rand-{int(random.random() * 100000)}"
         card_html = f'''
         <div class="card glass-panel">
             <button class="delete-btn" py-click="delete_item">✕</button>
             <div class="card-img-wrapper">
-                <img src="{image_url}" class="card-img" alt="{name}" onerror="this.src='https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600'">
+                <img src="{optimized_img}" class="card-img" alt="{name}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600'">
             </div>
             <h3 class="card-title" contenteditable="false">{name}</h3>
             <p class="card-desc" contenteditable="false">{desc if desc else "مزيج فاخر محضر بعناية تامة ليناسب ذائقتك."}</p>
@@ -1067,10 +1220,84 @@
         document.querySelector("#new-price").value = ""
         document.querySelector("#new-image-url").value = ""
 
-    # ------------------- JSON EXPORT -------------------
+    # ------------------- WELCOME MANAGEMENT -------------------
+    def refresh_welcome_admin_panel():
+        container = document.querySelector("#welcome-images-list")
+        container.innerHTML = ""
+        for idx, img_url in enumerate(welcome_data["images"]):
+            div = document.createElement("div")
+            div.className = "welcome-image-item"
+            div.innerHTML = f'''
+                <img src="{optimize_image_url(img_url, 100)}" style="width:80px; height:80px; object-fit:cover; border-radius:8px;">
+                <button class="delete-welcome-img btn-solid" data-index="{idx}" style="margin-top:5px; padding:4px 8px; font-size:12px;">✕ حذف</button>
+            '''
+            container.appendChild(div)
+        for btn in document.querySelectorAll(".delete-welcome-img"):
+            btn.addEventListener("click", lambda e, idx=int(btn.getAttribute("data-index")): delete_welcome_image(idx))
+
+    def delete_welcome_image(index):
+        if 0 <= index < len(welcome_data["images"]):
+            welcome_data["images"].pop(index)
+            refresh_welcome_admin_panel()
+            window.alert("تم حذف الصورة")
+
+    def add_welcome_image(event):
+        url = document.querySelector("#new-welcome-img").value.strip()
+        if url:
+            welcome_data["images"].append(url)
+            refresh_welcome_admin_panel()
+            document.querySelector("#new-welcome-img").value = ""
+            window.alert("تم إضافة الصورة")
+        else:
+            window.alert("الرجاء إدخال رابط صورة صحيح")
+
+    def preview_welcome_modal(event):
+        show_welcome_screen()
+
+    def save_welcome_to_json(event):
+        title = document.querySelector("#welcome-title").value.strip()
+        msg = document.querySelector("#welcome-message").value.strip()
+        if title:
+            welcome_data["title"] = title
+        if msg:
+            welcome_data["message"] = msg
+        window.alert("تم حفظ إعدادات الترحيب مؤقتاً، قم بتصدير JSON لحفظها نهائياً.")
+
+    def show_welcome_screen():
+        title_el = document.querySelector("#welcome-screen-title")
+        msg_el = document.querySelector("#welcome-screen-message")
+        images_container = document.querySelector("#welcome-screen-images")
+        title_el.innerText = welcome_data.get("title", "مرحباً")
+        msg_el.innerText = welcome_data.get("message", "استمتع بأجمل المشروبات")
+        # إظهار الـ spinner أثناء التحميل
+        images_container.innerHTML = '<div class="spinner"></div>'
+        screen = document.querySelector("#welcome-screen")
+        screen.style.display = "flex"
+        
+        # تحميل الصور بشكل غير متزامن مع تحسين
+        async def load_images():
+            img_urls = welcome_data.get("images", [])
+            if not img_urls:
+                images_container.innerHTML = '<div style="color: var(--text-dim);">لا توجد صور معروضة</div>'
+                return
+            images_container.innerHTML = ""
+            for img_url in img_urls:
+                img = document.createElement("img")
+                img.className = "welcome-image"
+                img.loading = "lazy"
+                img.src = optimize_image_url(img_url, 300)
+                img.alt = "welcome"
+                images_container.appendChild(img)
+        asyncio.ensure_future(load_images())
+
+    def close_welcome_screen(event):
+        screen = document.querySelector("#welcome-screen")
+        screen.style.display = "none"
+
+    # ------------------- JSON EXPORT & IMPORT -------------------
     def export_menu_to_json(event):
         sections = document.querySelectorAll("#main-menu-content > .section-block")
-        data = {"sections": []}
+        data = {"sections": [], "welcome": welcome_data}
         for section in sections:
             title_elem = section.querySelector(".section-title")
             title = title_elem.innerText.strip() if title_elem else "بدون عنوان"
@@ -1082,9 +1309,9 @@
                 name = card.querySelector(".card-title").innerText.strip()
                 desc = card.querySelector(".card-desc").innerText.strip()
                 price_text = card.querySelector(".price").innerText.strip()
-                # extract digits
                 price = int(''.join(filter(str.isdigit, price_text)))
                 img = card.querySelector(".card-img").getAttribute("src")
+                # لا نحتاج لحفظ الرابط المحسن، نحفظ الرابط الأصلي إن وجد
                 items.append({
                     "name": name,
                     "desc": desc,
@@ -1096,6 +1323,14 @@
                 "container_id": container_id,
                 "items": items
             })
+        title_input = document.querySelector("#welcome-title").value.strip()
+        msg_input = document.querySelector("#welcome-message").value.strip()
+        if title_input:
+            data["welcome"]["title"] = title_input
+        if msg_input:
+            data["welcome"]["message"] = msg_input
+        data["welcome"]["images"] = welcome_data["images"]
+        
         json_str = json.dumps(data, ensure_ascii=False, indent=2)
         blob = window.Blob.new([json_str], {type: "application/json"})
         url = window.URL.createObjectURL(blob)
@@ -1106,13 +1341,12 @@
         a.click()
         window.document.body.removeChild(a)
         window.URL.revokeObjectURL(url)
-        window.alert("✅ تم تصدير القائمة بنجاح! ملف 'menu_backup.json' جاهز للتنزيل.")
+        window.alert("✅ تم تصدير القائمة مع الترحيب بنجاح!")
 
-    # ------------------- JSON IMPORT & REFRESH -------------------
     def rebuild_menu_from_json(data):
         menu_container = document.querySelector("#main-menu-content")
         menu_container.innerHTML = ""
-        for sec in data["sections"]:
+        for sec in data.get("sections", []):
             title = sec["title"]
             container_id = sec.get("container_id", f"section-{int(time.time())}-{random.randint(1,1000)}")
             section_div = document.createElement("div")
@@ -1135,15 +1369,15 @@
             section_div.appendChild(header_div)
             section_div.appendChild(grid_div)
             menu_container.appendChild(section_div)
-            for item in sec["items"]:
+            for item in sec.get("items", []):
                 rand_btn_id = f"btn-import-{int(random.random() * 100000)}"
-                # sanitize image url (if empty)
-                img_url = item.get('image', 'https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600')
+                raw_img = item.get('image', 'https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600')
+                optimized_img = optimize_image_url(raw_img, 400)
                 card_html = f'''
                 <div class="card glass-panel">
                     <button class="delete-btn" py-click="delete_item">✕</button>
                     <div class="card-img-wrapper">
-                        <img src="{img_url}" class="card-img" alt="{item['name']}" onerror="this.src='https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600'">
+                        <img src="{optimized_img}" class="card-img" alt="{item['name']}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600'">
                     </div>
                     <h3 class="card-title" contenteditable="false">{item['name']}</h3>
                     <p class="card-desc" contenteditable="false">{item['desc']}</p>
@@ -1156,6 +1390,14 @@
                 </div>
                 '''
                 grid_div.insertAdjacentHTML('beforeend', card_html)
+        if "welcome" in data:
+            global welcome_data
+            welcome_data = data["welcome"]
+            if document.querySelector("#welcome-title"):
+                document.querySelector("#welcome-title").value = welcome_data.get("title", "")
+            if document.querySelector("#welcome-message"):
+                document.querySelector("#welcome-message").value = welcome_data.get("message", "")
+            refresh_welcome_admin_panel()
 
     def import_menu_from_json(event):
         input_el = window.document.createElement("input")
@@ -1170,7 +1412,7 @@
                 try:
                     data = json.loads(reader.result)
                     rebuild_menu_from_json(data)
-                    window.alert("✅ تم استيراد القائمة بنجاح!")
+                    window.alert("✅ تم استيراد القائمة مع الترحيب بنجاح!")
                     refresh_categories_dropdown()
                     if is_logged_in:
                         titles = document.querySelectorAll(".section-title, .card-title, .card-desc, .price")
@@ -1184,26 +1426,22 @@
         input_el.click()
 
     async def refresh_from_json(event):
-        """ يجلب أحدث نسخة من menu.json من الخادم ويعيد بناء القائمة """
         try:
-            # إضافة cache buster لمنع التخزين المؤقت
             response = await pyfetch(f"menu.json?t={int(time.time())}", cache="no-store")
             if response.status == 200:
                 data = await response.json()
                 rebuild_menu_from_json(data)
-                window.alert("✅ تم تحديث القائمة من ملف menu.json بنجاح!")
+                window.alert("✅ تم تحديث القائمة والترحيب من menu.json!")
                 refresh_categories_dropdown()
-                # إعادة تطبيق وضع الإدارة إذا كان نشطاً
                 if is_logged_in:
                     titles = document.querySelectorAll(".section-title, .card-title, .card-desc, .price")
                     for t in titles:
                         t.setAttribute("contenteditable", "true")
             else:
-                window.alert("❌ فشل تحميل menu.json. تأكد من وجود الملف في نفس المسار.")
+                window.alert("❌ فشل تحميل menu.json. تأكد من وجود الملف.")
         except Exception as e:
-            window.alert(f"خطأ في التحميل: {str(e)}")
+            window.alert(f"خطأ: {str(e)}")
 
-    # ------------------- LOAD INITIAL MENU -------------------
     async def load_initial_menu():
         try:
             response = await pyfetch(f"menu.json?t={int(time.time())}", cache="no-store")
@@ -1211,34 +1449,31 @@
                 data = await response.json()
                 rebuild_menu_from_json(data)
                 print("✅ تم تحميل القائمة من menu.json")
-                return
+            else:
+                raise Exception("no file")
         except Exception as e:
-            print("لم يتم العثور على menu.json، سيتم استخدام البيانات الافتراضية.")
-        
-        # بيانات افتراضية (نسخة احتياطية)
-        default_data = {
-            "sections": [
-                {
-                    "title": "القهوة المقطرة والساخنة",
-                    "container_id": "hot-container",
-                    "items": [
-                        {"name": "كيميكس كولومبي", "desc": "قهوة مختصة مقطرة بأداة الكيميكس...", "price": 120, "image": "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=600"},
-                        {"name": "فلات وايت", "desc": "إسبريسو غني مع طبقة رقيقة من الحليب...", "price": 85, "image": "https://images.unsplash.com/photo-1541167760496-1628856ab772?w=600"}
-                    ]
-                },
-                {
-                    "title": "المشروبات الباردة والمنعشة",
-                    "container_id": "cold-container",
-                    "items": [
-                        {"name": "كولد برو سيجنتشر", "desc": "قهوة منقوعة بالماء البارد...", "price": 95, "image": "https://images.unsplash.com/photo-1517701550927-30cfcb64c584?w=600"}
-                    ]
+            print("استخدام البيانات الافتراضية")
+            default_data = {
+                "sections": [
+                    {"title": "القهوة المقطرة والساخنة", "container_id": "hot-container", "items": [
+                        {"name": "كيميكس كولومبي", "desc": "قهوة مختصة مقطرة...", "price": 120, "image": "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=600"},
+                        {"name": "فلات وايت", "desc": "إسبريسو غني...", "price": 85, "image": "https://images.unsplash.com/photo-1541167760496-1628856ab772?w=600"}
+                    ]},
+                    {"title": "المشروبات الباردة", "container_id": "cold-container", "items": [
+                        {"name": "كولد برو", "desc": "قهوة باردة...", "price": 95, "image": "https://images.unsplash.com/photo-1517701550927-30cfcb64c584?w=600"}
+                    ]}
+                ],
+                "welcome": {
+                    "title": "مرحباً في CS MENU",
+                    "message": "استمتع بأجمل المشروبات المختصة والخدمات الفاخرة",
+                    "images": ["https://i.ibb.co/sdKVjdsm/Chat-GPT-Image-11-2026-01-15-34.png"]
                 }
-            ]
-        }
-        rebuild_menu_from_json(default_data)
-        print("✅ تم تحميل القائمة الافتراضية")
+            }
+            rebuild_menu_from_json(default_data)
+        if not window.localStorage.getItem("welcomeShown"):
+            show_welcome_screen()
+            window.localStorage.setItem("welcomeShown", "true")
 
-    # ------------------- RUN INIT -------------------
     asyncio.ensure_future(load_initial_menu())
 </script>
 
