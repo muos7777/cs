@@ -25,7 +25,6 @@
             --whatsapp-color: #25D366;
             --whatsapp-gray: #555555;
             
-            /* متغيرات التحكم الديناميكي بالحجم والمكان */
             --custom-font-size: 16px;
             --custom-padding: 14px;
             --content-order: normal;
@@ -88,6 +87,7 @@
             margin-top: 3px;
             outline: none;
             transition: color 0.3s;
+            min-height: 20px;
         }
 
         body.admin-mode .brand p {
@@ -270,8 +270,13 @@
         }
 
         body.admin-mode .card-title,
-        body.admin-mode .card-desc,
-        body.admin-mode .price {
+        body.admin-mode .card-desc {
+            border-bottom: 1px dashed rgba(212, 175, 55, 0.5);
+            cursor: pointer;
+        }
+
+        /* المنتجات العادية */
+        body.admin-mode .product-price {
             border-bottom: 1px dashed rgba(212, 175, 55, 0.5);
             cursor: pointer;
         }
@@ -369,7 +374,7 @@
             border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        .price {
+        .product-price {
             font-family: 'Montserrat', sans-serif;
             color: var(--gold-accent);
             font-size: 1.2em;
@@ -412,6 +417,27 @@
             justify-content: center;
             font-family: 'Montserrat', sans-serif;
             box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
+
+        .link-btn {
+            background: rgba(212, 175, 55, 0.2);
+            border: 1px solid var(--gold-accent);
+            color: var(--gold-accent);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .link-btn:hover {
+            background: var(--gold-gradient);
+            color: #000;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
         }
 
         .invoice-wrapper {
@@ -626,7 +652,7 @@
         .modal-box h3 { margin-bottom: 20px; font-size: 22px; }
         .modal-box input { margin-bottom: 20px; text-align: center; letter-spacing: 2px; font-size: 18px; }
 
-        /* شاشة الترحيب (بدون صورة) */
+        /* شاشة الترحيب */
         .welcome-box {
             max-width: 440px;
             padding: 40px 30px;
@@ -670,7 +696,7 @@
     <header>
         <div class="brand">
             <h1>CS MENU</h1>
-            <p id="cafe-subtitle" contenteditable="false">المذاق الاستثنائي يلتقي بالفخامة</p>
+            <p id="cafe-subtitle" contenteditable="false"></p>
         </div>
         <button id="auth-btn" class="auth-btn" py-click="toggle_auth_modal">إدارة القائمة</button>
     </header>
@@ -681,12 +707,12 @@
             <h2>إضافة صنف جديد ✦</h2>
             <div class="admin-grid">
                 <div class="input-group">
-                    <label>اسم المشروب</label>
-                    <input type="text" id="new-name" class="premium-input" placeholder="V60 إثيوبي">
+                    <label>اسم المنتج</label>
+                    <input type="text" id="new-name" class="premium-input" placeholder="منتج عادي">
                 </div>
                 <div class="input-group">
-                    <label>وصف المشروب</label>
-                    <input type="text" id="new-desc" class="premium-input" placeholder="نكهات فاكهية">
+                    <label>وصف المنتج</label>
+                    <input type="text" id="new-desc" class="premium-input" placeholder="وصف">
                 </div>
                 <div class="input-group">
                     <label>السعر (ج.م)</label>
@@ -700,14 +726,39 @@
                     <label>رابط الصورة (URL)</label>
                     <input type="url" id="new-image-url" class="premium-input" placeholder="https://example.com/image.jpg">
                 </div>
-                <button class="btn-solid" py-click="add_new_item">إدراج بالقائمة</button>
+                <button class="btn-solid" py-click="add_new_item">إدراج منتج</button>
+            </div>
+
+            <h2>➕ إضافة رابط جديد (رابط تشعبي مع صورة)</h2>
+            <div class="admin-grid">
+                <div class="input-group">
+                    <label>عنوان الرابط</label>
+                    <input type="text" id="new-link-title" class="premium-input" placeholder="مثال: قائمة الحلويات">
+                </div>
+                <div class="input-group">
+                    <label>وصف الرابط (اختياري)</label>
+                    <input type="text" id="new-link-desc" class="premium-input" placeholder="وصف قصير">
+                </div>
+                <div class="input-group">
+                    <label>رابط الوجهة (URL)</label>
+                    <input type="url" id="new-link-url" class="premium-input" placeholder="https://example.com">
+                </div>
+                <div class="input-group">
+                    <label>القسم المستهدف</label>
+                    <select id="new-link-category" class="premium-input"></select>
+                </div>
+                <div class="input-group" style="grid-column: 1 / -2;">
+                    <label>رابط الصورة للتوضيح (URL)</label>
+                    <input type="url" id="new-link-image" class="premium-input" placeholder="https://example.com/photo.jpg">
+                </div>
+                <button class="btn-solid" py-click="add_new_link">إدراج رابط</button>
             </div>
 
             <h2>إدارة وهيكلة الأقسام ✦</h2>
             <div class="admin-grid">
                 <div class="input-group" style="grid-column: 1 / -2;">
                     <label>اسم القسم الجديد</label>
-                    <input type="text" id="new-section-title" class="premium-input" placeholder="مثال: الحلويات الفاخرة">
+                    <input type="text" id="new-section-title" class="premium-input" placeholder="مثال: روابط مفيدة">
                 </div>
                 <button class="btn-solid" py-click="add_new_section">إنشاء القسم فوراً</button>
             </div>
@@ -788,7 +839,7 @@
 
     </main>
 
-    <!-- شاشة الترحيب (بدون صورة، إنجليزية، تأخير 5 ثوانٍ) -->
+    <!-- شاشة الترحيب -->
     <div id="welcome-modal" class="modal-overlay" style="display: flex;">
         <div class="glass-panel modal-box welcome-box">
             <h2>Welcome to CS MENU</h2>
@@ -880,28 +931,50 @@
         asyncio.ensure_future(fetch_usd_rate())
 
         def refresh_categories_dropdown():
+            # تحديث قائمة الأقسام للمنتجات
             cat_select = document.querySelector("#new-category")
-            if not cat_select:
-                return
-            current_selection = cat_select.value
-            cat_select.innerHTML = ""
-            grids = document.querySelectorAll(".menu-grid")
-            for grid in grids:
-                grid_id = grid.getAttribute("id")
-                if not grid_id:
-                    continue
-                block = grid.closest(".section-block")
-                title = "قسم بدون اسم"
-                if block:
-                    title_el = block.querySelector(".section-title")
-                    if title_el:
-                        title = title_el.innerText.strip()
-                opt = document.createElement("option")
-                opt.value = grid_id
-                opt.text = title
-                cat_select.appendChild(opt)
-            if current_selection:
-                cat_select.value = current_selection
+            if cat_select:
+                current = cat_select.value
+                cat_select.innerHTML = ""
+                grids = document.querySelectorAll(".menu-grid")
+                for grid in grids:
+                    grid_id = grid.getAttribute("id")
+                    if not grid_id:
+                        continue
+                    block = grid.closest(".section-block")
+                    title = "قسم بدون اسم"
+                    if block:
+                        title_el = block.querySelector(".section-title")
+                        if title_el:
+                            title = title_el.innerText.strip()
+                    opt = document.createElement("option")
+                    opt.value = grid_id
+                    opt.text = title
+                    cat_select.appendChild(opt)
+                if current:
+                    cat_select.value = current
+            # تحديث قائمة الأقسام للروابط
+            link_cat = document.querySelector("#new-link-category")
+            if link_cat:
+                current2 = link_cat.value
+                link_cat.innerHTML = ""
+                grids = document.querySelectorAll(".menu-grid")
+                for grid in grids:
+                    grid_id = grid.getAttribute("id")
+                    if not grid_id:
+                        continue
+                    block = grid.closest(".section-block")
+                    title = "قسم بدون اسم"
+                    if block:
+                        title_el = block.querySelector(".section-title")
+                        if title_el:
+                            title = title_el.innerText.strip()
+                    opt = document.createElement("option")
+                    opt.value = grid_id
+                    opt.text = title
+                    link_cat.appendChild(opt)
+                if current2:
+                    link_cat.value = current2
 
         window.pyscript_refresh_dropdown = refresh_categories_dropdown
 
@@ -919,7 +992,7 @@
                 document.body.classList.remove("admin-mode")
                 auth_btn.innerText = "إدارة القائمة"
                 subtitle.setAttribute("contenteditable", "false")
-                titles = document.querySelectorAll(".section-title, .card-title, .card-desc, .price")
+                titles = document.querySelectorAll(".section-title, .card-title, .card-desc, .product-price")
                 for t in titles:
                     t.setAttribute("contenteditable", "false")
             else:
@@ -944,7 +1017,7 @@
                 document.body.classList.add("admin-mode")
                 auth_btn.innerText = "إغلاق اللوحة ✕"
                 subtitle.setAttribute("contenteditable", "true")
-                titles = document.querySelectorAll(".section-title, .card-title, .card-desc, .price")
+                titles = document.querySelectorAll(".section-title, .card-title, .card-desc, .product-price")
                 for t in titles:
                     t.setAttribute("contenteditable", "true")
                 refresh_categories_dropdown()
@@ -986,12 +1059,18 @@
             
             for btn in order_buttons:
                 card = btn.closest(".card")
-                current_name = card.querySelector(".card-title").innerText.strip() if card else btn.getAttribute("data-name")
+                if not card:
+                    continue
+                # فقط المنتجات العادية (التي تحتوي على زر طلب) يتم احتسابها
+                current_name = card.querySelector(".card-title").innerText.strip()
+                price_elem = card.querySelector(".product-price")
+                if not price_elem:
+                    continue
+                price_text = price_elem.innerText.replace("EGP", "").strip()
                 try:
-                    price_text = card.querySelector(".price").innerText.replace("EGP", "").strip() if card else btn.getAttribute("data-price")
                     current_price = int(''.join(filter(str.isdigit, price_text)))
                 except:
-                    current_price = int(btn.getAttribute("data-price"))
+                    continue
                 qty = int(btn.getAttribute("data-qty"))
                 if qty > 0:
                     btn_id = btn.getAttribute("id")
@@ -1075,6 +1154,7 @@
             refresh_categories_dropdown()
             window.alert(f"تم إنشاء قسم '{title}' بنجاح.")
 
+        # إضافة منتج عادي
         def add_new_item(event):
             name = document.querySelector("#new-name").value.strip()
             desc = document.querySelector("#new-desc").value.strip()
@@ -1082,21 +1162,21 @@
             category = document.querySelector("#new-category").value
             image_url = document.querySelector("#new-image-url").value.strip()
             if not name or not price:
-                window.alert("الرجاء إدخال اسم المشروب وسعره.")
+                window.alert("الرجاء إدخال اسم المنتج وسعره.")
                 return
             if not image_url:
                 image_url = "https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600"
             rand_btn_id = f"btn-rand-{int(random.random() * 100000)}"
             card_html = f'''
-            <div class="card glass-panel">
+            <div class="card glass-panel" data-type="product">
                 <button class="delete-btn" py-click="delete_item">✕</button>
                 <div class="card-img-wrapper">
-                    <img src="{image_url}" class="card-img" alt="{name}" onerror="this.src='https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600'">
+                    <img src="{image_url}" class="card-img" alt="{name}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600'">
                 </div>
                 <h3 class="card-title" contenteditable="false">{name}</h3>
                 <p class="card-desc" contenteditable="false">{desc if desc else "مزيج فاخر محضر بعناية تامة ليناسب ذائقتك."}</p>
                 <div class="card-action">
-                    <span class="price" contenteditable="false">{price} EGP</span>
+                    <span class="product-price" contenteditable="false">{price} EGP</span>
                     <button class="order-btn" id="{rand_btn_id}" py-click="increment_qty" data-price="{price}" data-name="{name}" data-qty="0">
                         Order <span class="order-badge">0</span>
                     </button>
@@ -1105,13 +1185,49 @@
             '''
             try:
                 document.querySelector(f"#{category}").insertAdjacentHTML('beforeend', card_html)
-                window.alert("تمت إضافة المشروب بنجاح.")
+                window.alert("تمت إضافة المنتج بنجاح.")
             except Exception as e:
                 window.alert("عذراً، حدث خطأ أثناء تحديد القسم.")
             document.querySelector("#new-name").value = ""
             document.querySelector("#new-desc").value = ""
             document.querySelector("#new-price").value = ""
             document.querySelector("#new-image-url").value = ""
+
+        # إضافة رابط جديد
+        def add_new_link(event):
+            title = document.querySelector("#new-link-title").value.strip()
+            desc = document.querySelector("#new-link-desc").value.strip()
+            link_url = document.querySelector("#new-link-url").value.strip()
+            category = document.querySelector("#new-link-category").value
+            image_url = document.querySelector("#new-link-image").value.strip()
+            if not title or not link_url:
+                window.alert("الرجاء إدخال عنوان الرابط ورابط الوجهة.")
+                return
+            if not image_url:
+                image_url = "https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600"
+            rand_btn_id = f"link-rand-{int(random.random() * 100000)}"
+            card_html = f'''
+            <div class="card glass-panel" data-type="link" data-link="{link_url}">
+                <button class="delete-btn" py-click="delete_item">✕</button>
+                <div class="card-img-wrapper">
+                    <img src="{image_url}" class="card-img" alt="{title}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600'">
+                </div>
+                <h3 class="card-title" contenteditable="false">{title}</h3>
+                <p class="card-desc" contenteditable="false">{desc if desc else "رابط مفيد"}</p>
+                <div class="card-action">
+                    <a href="{link_url}" target="_blank" class="link-btn" onclick="event.stopPropagation();">زيارة الرابط</a>
+                </div>
+            </div>
+            '''
+            try:
+                document.querySelector(f"#{category}").insertAdjacentHTML('beforeend', card_html)
+                window.alert("تمت إضافة الرابط بنجاح.")
+            except Exception as e:
+                window.alert("عذراً، حدث خطأ أثناء تحديد القسم.")
+            document.querySelector("#new-link-title").value = ""
+            document.querySelector("#new-link-desc").value = ""
+            document.querySelector("#new-link-url").value = ""
+            document.querySelector("#new-link-image").value = ""
 
         # ------------------- JSON EXPORT / IMPORT / REFRESH -------------------
         def rebuild_menu_from_json(data):
@@ -1141,26 +1257,43 @@
                 section_div.appendChild(grid_div)
                 menu_container.appendChild(section_div)
                 for item in sec.get("items", []):
-                    rand_btn_id = f"btn-import-{int(random.random() * 100000)}"
-                    img_url = item.get('image', 'https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600')
-                    card_html = f'''
-                    <div class="card glass-panel">
-                        <button class="delete-btn" py-click="delete_item">✕</button>
-                        <div class="card-img-wrapper">
-                            <img src="{img_url}" class="card-img" alt="{item['name']}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600'">
+                    item_type = item.get("type", "product")
+                    rand_id = f"item-{int(random.random() * 100000)}"
+                    if item_type == "product":
+                        img_url = item.get('image', 'https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600')
+                        card_html = f'''
+                        <div class="card glass-panel" data-type="product">
+                            <button class="delete-btn" py-click="delete_item">✕</button>
+                            <div class="card-img-wrapper">
+                                <img src="{img_url}" class="card-img" alt="{item['name']}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600'">
+                            </div>
+                            <h3 class="card-title" contenteditable="false">{item['name']}</h3>
+                            <p class="card-desc" contenteditable="false">{item['desc']}</p>
+                            <div class="card-action">
+                                <span class="product-price" contenteditable="false">{item['price']} EGP</span>
+                                <button class="order-btn" id="{rand_id}" py-click="increment_qty" data-price="{item['price']}" data-name="{item['name']}" data-qty="0">
+                                    Order <span class="order-badge">0</span>
+                                </button>
+                            </div>
                         </div>
-                        <h3 class="card-title" contenteditable="false">{item['name']}</h3>
-                        <p class="card-desc" contenteditable="false">{item['desc']}</p>
-                        <div class="card-action">
-                            <span class="price" contenteditable="false">{item['price']} EGP</span>
-                            <button class="order-btn" id="{rand_btn_id}" py-click="increment_qty" data-price="{item['price']}" data-name="{item['name']}" data-qty="0">
-                                Order <span class="order-badge">0</span>
-                            </button>
+                        '''
+                    else:  # link
+                        img_url = item.get('image', 'https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600')
+                        link_url = item.get('linkUrl', '#')
+                        card_html = f'''
+                        <div class="card glass-panel" data-type="link" data-link="{link_url}">
+                            <button class="delete-btn" py-click="delete_item">✕</button>
+                            <div class="card-img-wrapper">
+                                <img src="{img_url}" class="card-img" alt="{item['name']}" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600'">
+                            </div>
+                            <h3 class="card-title" contenteditable="false">{item['name']}</h3>
+                            <p class="card-desc" contenteditable="false">{item['desc']}</p>
+                            <div class="card-action">
+                                <a href="{link_url}" target="_blank" class="link-btn" onclick="event.stopPropagation();">زيارة الرابط</a>
+                            </div>
                         </div>
-                    </div>
-                    '''
+                        '''
                     grid_div.insertAdjacentHTML('beforeend', card_html)
-            # تحديث القائمة المنسدلة للأقسام
             refresh_categories_dropdown()
 
         def export_menu_to_json(event):
@@ -1176,15 +1309,31 @@
                 for card in cards:
                     name = card.querySelector(".card-title").innerText.strip()
                     desc = card.querySelector(".card-desc").innerText.strip()
-                    price_text = card.querySelector(".price").innerText.strip()
-                    price = int(''.join(filter(str.isdigit, price_text)))
                     img = card.querySelector(".card-img").getAttribute("src")
-                    items.append({
-                        "name": name,
-                        "desc": desc,
-                        "price": price,
-                        "image": img
-                    })
+                    # تحديد النوع
+                    if card.querySelector(".order-btn"):
+                        # منتج عادي
+                        price_elem = card.querySelector(".product-price")
+                        price_text = price_elem.innerText.replace("EGP", "").strip()
+                        price = int(''.join(filter(str.isdigit, price_text))) if price_text else 0
+                        items.append({
+                            "type": "product",
+                            "name": name,
+                            "desc": desc,
+                            "price": price,
+                            "image": img
+                        })
+                    elif card.querySelector(".link-btn"):
+                        # رابط
+                        link_btn = card.querySelector(".link-btn")
+                        link_url = link_btn.getAttribute("href")
+                        items.append({
+                            "type": "link",
+                            "name": name,
+                            "desc": desc,
+                            "linkUrl": link_url,
+                            "image": img
+                        })
                 data["sections"].append({
                     "title": title,
                     "container_id": container_id,
@@ -1217,7 +1366,7 @@
                         rebuild_menu_from_json(data)
                         window.alert("✅ تم استيراد القائمة بنجاح!")
                         if is_logged_in:
-                            titles = document.querySelectorAll(".section-title, .card-title, .card-desc, .price")
+                            titles = document.querySelectorAll(".section-title, .card-title, .card-desc, .product-price")
                             for t in titles:
                                 t.setAttribute("contenteditable", "true")
                     except Exception as err:
@@ -1235,7 +1384,7 @@
                     rebuild_menu_from_json(data)
                     window.alert("✅ تم تحديث القائمة من ملف menu.json!")
                     if is_logged_in:
-                        titles = document.querySelectorAll(".section-title, .card-title, .card-desc, .price")
+                        titles = document.querySelectorAll(".section-title, .card-title, .card-desc, .product-price")
                         for t in titles:
                             t.setAttribute("contenteditable", "true")
                 else:
@@ -1244,7 +1393,6 @@
                 window.alert(f"خطأ: {str(e)}")
 
         async def load_initial_menu():
-            """محاولة تحميل menu.json، وإلا استخدام البيانات الافتراضية (الموجودة في HTML الأصلي)"""
             try:
                 response = await pyfetch(f"menu.json?t={int(time.time())}", cache="no-store")
                 if response.status == 200:
@@ -1254,22 +1402,21 @@
                     return
             except Exception as e:
                 print("لم يتم العثور على menu.json، سيتم استخدام البيانات الافتراضية.")
-            # البيانات الافتراضية (نفس الموجودة في HTML الأصلي)
             default_data = {
                 "sections": [
                     {
                         "title": "القهوة المقطرة والساخنة",
                         "container_id": "hot-container",
                         "items": [
-                            {"name": "كيميكس كولومبي", "desc": "قهوة مختصة مقطرة بأداة الكيميكس، تتميز بقوام نقي وإيحاءات الكراميل والشوكولاتة الداكنة.", "price": 120, "image": "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=600"},
-                            {"name": "فلات وايت", "desc": "إسبريسو غني مع طبقة رقيقة من الحليب المبخر بسلاسة فائقة، لقوام مخملي متوازن.", "price": 85, "image": "https://images.unsplash.com/photo-1541167760496-1628856ab772?w=600"}
+                            {"type": "product", "name": "كيميكس كولومبي", "desc": "قهوة مختصة مقطرة بأداة الكيميكس، تتميز بقوام نقي وإيحاءات الكراميل والشوكولاتة الداكنة.", "price": 120, "image": "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?w=600"},
+                            {"type": "product", "name": "فلات وايت", "desc": "إسبريسو غني مع طبقة رقيقة من الحليب المبخر بسلاسة فائقة، لقوام مخملي متوازن.", "price": 85, "image": "https://images.unsplash.com/photo-1541167760496-1628856ab772?w=600"}
                         ]
                     },
                     {
                         "title": "المشروبات الباردة والمنعشة",
                         "container_id": "cold-container",
                         "items": [
-                            {"name": "كولد برو سيجنتشر", "desc": "قهوة منقوعة بالماء البارد لمدة 24 ساعة، خالية من الحمضية، تقدم مع ثلج نقي.", "price": 95, "image": "https://images.unsplash.com/photo-1517701550927-30cfcb64c584?w=600"}
+                            {"type": "product", "name": "كولد برو سيجنتشر", "desc": "قهوة منقوعة بالماء البارد لمدة 24 ساعة، خالية من الحمضية، تقدم مع ثلج نقي.", "price": 95, "image": "https://images.unsplash.com/photo-1517701550927-30cfcb64c584?w=600"}
                         ]
                     }
                 ]
