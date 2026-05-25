@@ -275,7 +275,6 @@
             cursor: pointer;
         }
 
-        /* المنتجات العادية */
         body.admin-mode .product-price {
             border-bottom: 1px dashed rgba(212, 175, 55, 0.5);
             cursor: pointer;
@@ -419,21 +418,22 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.5);
         }
 
+        /* زر الرابط (مكبر) */
         .link-btn {
             background: rgba(212, 175, 55, 0.2);
             border: 1px solid var(--gold-accent);
             color: var(--gold-accent);
-            padding: 6px 16px;
-            border-radius: 20px;
+            padding: 8px 24px;
+            border-radius: 40px;
             font-family: 'Montserrat', sans-serif;
-            font-size: 13px;
-            font-weight: 700;
+            font-size: 1.2rem;
+            font-weight: 800;
             cursor: pointer;
             transition: all 0.3s;
             text-decoration: none;
             display: inline-block;
+            letter-spacing: 0.5px;
         }
-
         .link-btn:hover {
             background: var(--gold-gradient);
             color: #000;
@@ -652,7 +652,7 @@
         .modal-box h3 { margin-bottom: 20px; font-size: 22px; }
         .modal-box input { margin-bottom: 20px; text-align: center; letter-spacing: 2px; font-size: 18px; }
 
-        /* شاشة الترحيب */
+        /* شاشة الترحيب (بدون صورة) */
         .welcome-box {
             max-width: 440px;
             padding: 40px 30px;
@@ -1061,7 +1061,6 @@
                 card = btn.closest(".card")
                 if not card:
                     continue
-                # فقط المنتجات العادية (التي تحتوي على زر طلب) يتم احتسابها
                 current_name = card.querySelector(".card-title").innerText.strip()
                 price_elem = card.querySelector(".product-price")
                 if not price_elem:
@@ -1193,7 +1192,7 @@
             document.querySelector("#new-price").value = ""
             document.querySelector("#new-image-url").value = ""
 
-        # إضافة رابط جديد
+        # إضافة رابط جديد (مع زر Visit Link)
         def add_new_link(event):
             title = document.querySelector("#new-link-title").value.strip()
             desc = document.querySelector("#new-link-desc").value.strip()
@@ -1215,7 +1214,7 @@
                 <h3 class="card-title" contenteditable="false">{title}</h3>
                 <p class="card-desc" contenteditable="false">{desc if desc else "رابط مفيد"}</p>
                 <div class="card-action">
-                    <a href="{link_url}" target="_blank" class="link-btn" onclick="event.stopPropagation();">زيارة الرابط</a>
+                    <a href="{link_url}" target="_blank" class="link-btn" onclick="event.stopPropagation();">Visit Link</a>
                 </div>
             </div>
             '''
@@ -1289,7 +1288,7 @@
                             <h3 class="card-title" contenteditable="false">{item['name']}</h3>
                             <p class="card-desc" contenteditable="false">{item['desc']}</p>
                             <div class="card-action">
-                                <a href="{link_url}" target="_blank" class="link-btn" onclick="event.stopPropagation();">زيارة الرابط</a>
+                                <a href="{link_url}" target="_blank" class="link-btn" onclick="event.stopPropagation();">Visit Link</a>
                             </div>
                         </div>
                         '''
@@ -1310,9 +1309,7 @@
                     name = card.querySelector(".card-title").innerText.strip()
                     desc = card.querySelector(".card-desc").innerText.strip()
                     img = card.querySelector(".card-img").getAttribute("src")
-                    # تحديد النوع
                     if card.querySelector(".order-btn"):
-                        # منتج عادي
                         price_elem = card.querySelector(".product-price")
                         price_text = price_elem.innerText.replace("EGP", "").strip()
                         price = int(''.join(filter(str.isdigit, price_text))) if price_text else 0
@@ -1324,7 +1321,6 @@
                             "image": img
                         })
                     elif card.querySelector(".link-btn"):
-                        # رابط
                         link_btn = card.querySelector(".link-btn")
                         link_url = link_btn.getAttribute("href")
                         items.append({
