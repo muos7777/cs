@@ -5,48 +5,56 @@
       "container_id": "hot-container",
       "items": [
         {
+          "type": "product",
           "name": "قهوة تركي | Turkish coffee",
           "desc": ".",
           "price": 30,
           "image": "https://i.ytimg.com/vi/hwbhA31qSYk/maxresdefault.jpg"
         },
         {
+          "type": "product",
           "name": "شاي مصري | Egyptian tea",
           "desc": ".",
           "price": 25,
           "image": "https://i.ytimg.com/vi/BFoUzKnDqIo/hqdefault.jpg"
         },
         {
+          "type": "product",
           "name": "شاي حليب | milk tea",
           "desc": ".",
           "price": 30,
           "image": "https://img.lahloba.com/news/large/f329ccdd-2d01-4389-bea9-0b67cbed2848.jpeg"
         },
         {
+          "type": "product",
           "name": "قهوة سريعة التحضير (سادة) | Instant Coffee : Black Coffee",
           "desc": ".",
           "price": 30,
           "image": "https://backend.abuauf.com/wp-content/uploads/2024/08/6223004760204-1.webp"
         },
         {
+          "type": "product",
           "name": "قهوة بالحليب | Coffee with Creamer",
           "desc": ".",
           "price": 35,
           "image": "https://www.allrecipes.com/thmb/I7P8QzPSX3BVaaEecmzWFFU9R2s=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/8745437-Date-Based-Coffee-Creamer-Allrecipes-Magazine-4x3-2e8a48b86fca47b78e78119cf3e0b43e.jpg"
         },
         {
+          "type": "product",
           "name": "قهوة بالبندق | Hazelnut Flavored Coffee",
           "desc": ".",
           "price": 40,
           "image": "https://koala.sh/api/image/v2-1tsu4-l6eid.jpg?width=1216&height=832&dream"
         },
         {
+          "type": "product",
           "name": "Caramel Flavored Coffee | قهوة بالكراميل",
           "desc": ".",
           "price": 35,
           "image": "https://foxeslovelemons.com/wp-content/uploads/2023/03/Caramel-Coffee-7.jpg"
         },
         {
+          "type": "product",
           "name": "Cappuccino | كابتشينو",
           "desc": ".",
           "price": 30,
@@ -59,6 +67,7 @@
       "container_id": "custom-container-8851",
       "items": [
         {
+          "type": "product",
           "name": "طفايه سجائر | ashtray",
           "desc": ".",
           "price": 0,
@@ -71,16 +80,31 @@
       "container_id": "custom-container-30643",
       "items": [
         {
+          "type": "product",
           "name": "منشفه وجه | Face towel",
           "desc": ".",
           "price": 0,
           "image": "https://img-edg.joomcdn.net/1f2409287732585efdcfbebe2a258dd62b1af46c_original.jpeg"
         },
         {
+          "type": "product",
           "name": "منشفه كبيرة | large towel",
           "desc": ".",
           "price": 0,
           "image": "https://cdn2.static1-sima-land.com/items/7306719/2/700-nw.jpg"
+        }
+      ]
+    },
+    {
+      "title": "مواقعنا | Our websites",
+      "container_id": "custom-container-2585",
+      "items": [
+        {
+          "type": "link",
+          "name": "CS.teavel",
+          "desc": ".",
+          "linkUrl": "https://muos7777.github.io/cscafe/",
+          "image": "https://i.ibb.co/VW8gDRgZ/Gemini-Generated-Image-hfh5qdhfh5qdhfh5.png"
         }
       ]
     }
